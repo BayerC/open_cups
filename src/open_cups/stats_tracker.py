@@ -1,7 +1,7 @@
 import time
 from collections.abc import Iterable
 
-from lecture_feedback.types import StatusSnapshot, UserSession, UserStatus
+from open_cups.types import StatusSnapshot, UserSession, UserStatus
 
 
 class StatsTracker:

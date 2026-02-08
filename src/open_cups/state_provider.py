@@ -2,10 +2,10 @@ import uuid
 
 import streamlit as st
 
-from lecture_feedback.application_state import ApplicationState
-from lecture_feedback.room import Question, Room
-from lecture_feedback.session_state import SessionState
-from lecture_feedback.types import UserStatus
+from open_cups.application_state import ApplicationState
+from open_cups.room import Question, Room
+from open_cups.session_state import SessionState
+from open_cups.types import UserStatus
 
 
 class LobbyState:

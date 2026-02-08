@@ -1,4 +1,4 @@
-from lecture_feedback.app import run
+from open_cups.app import run
 
 if __name__ == "__main__":
     run()

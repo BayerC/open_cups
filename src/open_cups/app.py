@@ -6,14 +6,14 @@ import qrcode
 import streamlit as st
 from streamlit_autorefresh import st_autorefresh
 
-from lecture_feedback.state_provider import (
+from open_cups.state_provider import (
     ClientState,
     HostState,
     LobbyState,
     RoomState,
     StateProvider,
 )
-from lecture_feedback.types import UserStatus
+from open_cups.types import UserStatus
 
 AUTOREFRESH_INTERVAL_MS = 2000
 USER_REMOVAL_TIMEOUT_SECONDS = (
@@ -34,7 +34,7 @@ def show_room_selection_screen(lobby: LobbyState) -> None:
         except ValueError:
             st.error("Room ID from URL not found")
 
-    st.title("Welcome to Lecture Feedback App")
+    st.title("Welcome to OpenCups")
     st.write("Host or join a room to share feedback.")
 
     col_left, col_right = st.columns(2, gap="medium")
@@ -137,6 +137,7 @@ def get_statistics_data_frame(room: RoomState) -> pd.DataFrame:
 
 
 def show_room_statistics(room: HostState | ClientState) -> None:
+    st.subheader("Room Overview")
     df = get_statistics_data_frame(room)
 
     if df.sum().sum() == 0:
@@ -163,13 +164,17 @@ def show_room_statistics(room: HostState | ClientState) -> None:
         height=250,
     )
 
+    fig.update_traces(
+        marker_cornerradius=8,
+    )
+
     disable_interactions_config = {
         "displayModeBar": False,
         "staticPlot": True,
     }
 
-    _, col2, _ = st.columns([1, 3, 1])
-    with col2:
+    left_col, _ = st.columns([3, 2])
+    with left_col:
         st.plotly_chart(fig, config=disable_interactions_config)
         participant_count = df.sum().sum()
         st.markdown(
@@ -186,6 +191,7 @@ def generate_qr_code_image(room_id: str) -> bytes:
 
     url_qr_code = qrcode.QRCode(
         border=0,
+        box_size=3,
     )
     url_qr_code.add_data(join_url)
     url_qr_code.make(fit=True)
@@ -198,17 +204,15 @@ def generate_qr_code_image(room_id: str) -> bytes:
 
 def show_active_room_header(room_id: str) -> None:
     st.query_params["room_id"] = room_id
-    left, right = st.columns([4, 1], vertical_alignment="center")
-    with left:
-        st.title("Active Room")
-    with right:
-        st.image(generate_qr_code_image(room_id), width="content")
+    st.title("Active Room")
+    left_col, right_col = st.columns([2, 1], gap="large")
 
-    col_1, col_2 = st.columns([1, 4], vertical_alignment="center")
-    with col_1:
-        st.write("**Room ID:**")
-    with col_2:
-        st.markdown(f"**`{room_id}`**")
+    with left_col:
+        st.subheader("Room ID")
+        st.markdown(f"**{room_id}**")
+        st.caption("Share this ID with participants to let them join")
+    with right_col:
+        st.image(generate_qr_code_image(room_id), width="content")
 
     st.divider()
 
@@ -219,25 +223,28 @@ def show_open_questions(state: HostState | ClientState) -> None:
     if not open_questions:
         st.info("No questions yet.")
     else:
+        left_col, right_col = st.columns([8, 1], vertical_alignment="center")
         for question in open_questions:
-            col1, col3 = st.columns([5, 1], vertical_alignment="center")
-            with col1:
-                st.write(question.text)
-            with col3:
+            with left_col:
+                st.info(question.text)
+            with right_col:
                 if isinstance(state, HostState):
                     if st.button(
                         f"{question.vote_count} ✅",
                         key=f"close_{question.id}",
                         help="Close question",
+                        width="stretch",
                     ):
                         state.close_question(question.id)
                         st.rerun()
                 elif isinstance(state, ClientState):
                     has_voted = state.has_voted(question)
                     if st.button(
-                        f"{question.vote_count} 🆙",
+                        f"{question.vote_count} ⬆️",
                         key=f"upvote_{question.id}",
                         disabled=has_voted,
+                        help="Vote for question",
+                        width="stretch",
                     ):
                         state.upvote_question(question.id)
                         st.rerun()

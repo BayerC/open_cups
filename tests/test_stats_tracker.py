@@ -1,7 +1,7 @@
 import pytest
 
-from lecture_feedback.stats_tracker import StatsTracker
-from lecture_feedback.types import UserSession, UserStatus
+from open_cups.stats_tracker import StatsTracker
+from open_cups.types import UserSession, UserStatus
 
 
 def test_status_history_snapshot_interval(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -10,7 +10,7 @@ def test_status_history_snapshot_interval(monkeypatch: pytest.MonkeyPatch) -> No
     def fake_time() -> float:
         return current_time
 
-    monkeypatch.setattr("lecture_feedback.stats_tracker.time.time", fake_time)
+    monkeypatch.setattr("open_cups.stats_tracker.time.time", fake_time)
 
     unit = StatsTracker(snapshot_interval_seconds=1, max_snapshot_count=10)
 
@@ -42,7 +42,7 @@ def test_status_history_trims_old_snapshots(monkeypatch: pytest.MonkeyPatch) -> 
     def fake_time() -> float:
         return current_time
 
-    monkeypatch.setattr("lecture_feedback.stats_tracker.time.time", fake_time)
+    monkeypatch.setattr("open_cups.stats_tracker.time.time", fake_time)
 
     unit = StatsTracker(snapshot_interval_seconds=0, max_snapshot_count=2)
 

@@ -1,6 +1,6 @@
 import pytest
 
-from lecture_feedback.room import Room
+from open_cups.room import Room
 
 
 def test_upvote_nonexistent_question_does_not_crash() -> None:
@@ -96,7 +96,7 @@ def test_questions_sorted_by_vote_count() -> None:
 
 
 def test_integration_with_stats_tracker(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setattr("lecture_feedback.room.time.time", lambda: 10.0)
+    monkeypatch.setattr("open_cups.room.time.time", lambda: 10.0)
     room = Room("room-id", "host-id")
 
     assert room.get_status_history() == []

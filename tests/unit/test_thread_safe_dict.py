@@ -2,7 +2,7 @@ from typing import Any
 
 import pytest
 
-from lecture_feedback.thread_safe_dict import ThreadSafeDict
+from open_cups.thread_safe_dict import ThreadSafeDict
 
 
 def test_basic_operations() -> None:

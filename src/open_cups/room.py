@@ -3,9 +3,9 @@ import time
 import uuid
 from collections.abc import Iterator
 
-from lecture_feedback.stats_tracker import StatsTracker
-from lecture_feedback.thread_safe_dict import ThreadSafeDict
-from lecture_feedback.types import Question, StatusSnapshot, UserSession, UserStatus
+from open_cups.stats_tracker import StatsTracker
+from open_cups.thread_safe_dict import ThreadSafeDict
+from open_cups.types import Question, StatusSnapshot, UserSession, UserStatus
 
 
 class Room:

@@ -9,7 +9,7 @@ from tests.bdd.test_helper import get_info_content, get_page_content
 def freeze_time_to_zero(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    monkeypatch.setattr("lecture_feedback.room.time.time", lambda: 0)
+    monkeypatch.setattr("open_cups.room.time.time", lambda: 0)
 
 
 @scenario(
@@ -49,7 +49,7 @@ def i_close_my_session(context: dict[str, AppTest]) -> None:
 @then("the second user should be on the room selection screen")
 def second_user_should_be_on_room_selection_screen(context: dict[str, AppTest]) -> None:
     assert len(context["second_user"].title) == 1
-    assert context["second_user"].title[0].value == "Welcome to Lecture Feedback App"
+    assert context["second_user"].title[0].value == "Welcome to OpenCups"
 
 
 @when("a given timeout has passed")
@@ -60,12 +60,12 @@ def given_timeout_has_passed(
     time_to_pass = 5
     step_time = 2
     # patch this in any case to be independent of the production value
-    monkeypatch.setattr("lecture_feedback.app.USER_REMOVAL_TIMEOUT_SECONDS", 3)
+    monkeypatch.setattr("open_cups.app.USER_REMOVAL_TIMEOUT_SECONDS", 3)
 
     for current_time in range(0, time_to_pass, step_time):
         for user in context.values():
             monkeypatch.setattr(
-                "lecture_feedback.room.time.time",
+                "open_cups.room.time.time",
                 lambda current_time=current_time: current_time,
             )
             user.run()
