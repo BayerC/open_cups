@@ -19,10 +19,10 @@ def test_status_history_snapshot_interval(monkeypatch: pytest.MonkeyPatch) -> No
     )
     history = unit.status_history
     assert len(history) == 1
-    assert history[0].green_count == 1
-    assert history[0].yellow_count == 1
-    assert history[0].red_count == 0
-    assert history[0].unknown_count == 0
+    assert history[0].counts[UserStatus.GREEN] == 1
+    assert history[0].counts[UserStatus.YELLOW] == 1
+    assert history[0].counts[UserStatus.RED] == 0
+    assert history[0].counts[UserStatus.UNKNOWN] == 0
 
     current_time = 11.0
     unit.record_status_snapshot(
@@ -30,8 +30,8 @@ def test_status_history_snapshot_interval(monkeypatch: pytest.MonkeyPatch) -> No
     )
     history = unit.status_history
     assert len(history) == 2
-    assert history[-1].green_count == 1
-    assert history[-1].yellow_count == 1
+    assert history[-1].counts[UserStatus.GREEN] == 1
+    assert history[-1].counts[UserStatus.YELLOW] == 1
 
     assert unit.session_start_time <= current_time
 

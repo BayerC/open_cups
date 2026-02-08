@@ -17,22 +17,19 @@ class StatsTracker:
             if time.time() - last_snapshot_time < self._snapshot_interval_seconds:
                 return
 
-        counts = {
-            UserStatus.GREEN: 0,
-            UserStatus.YELLOW: 0,
-            UserStatus.RED: 0,
-            UserStatus.UNKNOWN: 0,
-        }
-        for user_session in user_sessions:
-            counts[user_session.status] += 1
-
         snapshot = StatusSnapshot(
             timestamp=time.time(),
-            green_count=counts[UserStatus.GREEN],
-            yellow_count=counts[UserStatus.YELLOW],
-            red_count=counts[UserStatus.RED],
-            unknown_count=counts[UserStatus.UNKNOWN],
+            counts={
+                UserStatus.GREEN: 0,
+                UserStatus.YELLOW: 0,
+                UserStatus.RED: 0,
+                UserStatus.UNKNOWN: 0,
+            },
         )
+
+        for user_session in user_sessions:
+            snapshot.counts[user_session.status] += 1
+
         self._status_history.append(snapshot)
         if len(self._status_history) > self._max_snapshot_count:
             excess_count = len(self._status_history) - self._max_snapshot_count

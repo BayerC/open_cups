@@ -38,7 +38,4 @@ class Question:
 @dataclass
 class StatusSnapshot:
     timestamp: float
-    green_count: int
-    yellow_count: int
-    red_count: int
-    unknown_count: int
+    counts: dict[UserStatus, int]
