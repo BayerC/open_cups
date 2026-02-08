@@ -6,14 +6,14 @@ import qrcode
 import streamlit as st
 from streamlit_autorefresh import st_autorefresh
 
-from lecture_feedback.state_provider import (
+from open_cups.state_provider import (
     ClientState,
     HostState,
     LobbyState,
     RoomState,
     StateProvider,
 )
-from lecture_feedback.user_status import UserStatus
+from open_cups.user_status import UserStatus
 
 AUTOREFRESH_INTERVAL_MS = 2000
 USER_REMOVAL_TIMEOUT_SECONDS = (
@@ -34,7 +34,7 @@ def show_room_selection_screen(lobby: LobbyState) -> None:
         except ValueError:
             st.error("Room ID from URL not found")
 
-    st.title("Welcome to Lecture Feedback App")
+    st.title("Welcome to OpenCups")
     st.write("Host or join a room to share feedback.")
 
     col_left, col_right = st.columns(2, gap="medium")

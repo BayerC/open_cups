@@ -1,6 +1,6 @@
-from lecture_feedback.room import Room
-from lecture_feedback.thread_safe_dict import ThreadSafeDict
-from lecture_feedback.user_status import UserStatus
+from open_cups.room import Room
+from open_cups.thread_safe_dict import ThreadSafeDict
+from open_cups.user_status import UserStatus
 
 
 class ApplicationState:

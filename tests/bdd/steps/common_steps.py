@@ -1,7 +1,7 @@
 from pytest_bdd import given, parsers, then, when
 from streamlit.testing.v1 import AppTest
 
-from lecture_feedback.user_status import UserStatus
+from open_cups.user_status import UserStatus
 from tests.bdd.fixture import run_wrapper
 from tests.bdd.test_helper import get_room_id, refresh_all_apps
 
@@ -57,4 +57,4 @@ def see_active_room_screen(context: dict[str, AppTest]) -> None:
 @then("I should still be on the room selection screen")
 def on_room_selection_screen(context: dict[str, AppTest]) -> None:
     assert len(context["me"].title) == 1
-    assert context["me"].title[0].value == "Welcome to Lecture Feedback App"
+    assert context["me"].title[0].value == "Welcome to OpenCups"

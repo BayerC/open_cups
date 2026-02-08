@@ -288,7 +288,7 @@ pillow==12.1.0 \
 plotly==6.5.2 \
     --hash=sha256:7478555be0198562d1435dee4c308268187553cc15516a2f4dd034453699e393 \
     --hash=sha256:91757653bd9c550eeea2fa2404dba6b85d1e366d54804c340b2c874e5a7eb4a4
-    # via lecture-feedback
+    # via open-cups
 protobuf==6.33.5 \
     --hash=sha256:3093804752167bcab3998bec9f1048baae6e29505adaf1afd14a37bddede533c \
     --hash=sha256:69915a973dd0f60f31a08b8318b73eab2bd6a392c79184b3612226b0a3f8ec02 \
@@ -345,7 +345,7 @@ pytz==2025.2 \
 qrcode==8.2 \
     --hash=sha256:16e64e0716c14960108e85d853062c9e8bba5ca8252c0b4d0231b9df4060ff4f \
     --hash=sha256:35c3f2a4172b33136ab9f6b3ef1c00260dd2f66f858f24d88418a015f446506c
-    # via lecture-feedback
+    # via open-cups
 referencing==0.37.0 \
     --hash=sha256:381329a9f99628c9069361716891d34ad94af76e461dcb0335825aecc7692231 \
     --hash=sha256:44aefc3142c5b842538163acb373e24cce6632bd54bdb01b21ad5863489f50d8
@@ -431,12 +431,12 @@ streamlit==1.53.1 \
     --hash=sha256:9534d151feea485b69200dd36448f95f418c511e8c81186ceb57133bdf1443f7 \
     --hash=sha256:ae656af3b68b4bb2d669fa977606096f2021bcbaa14a454a290f8e0a37bab277
     # via
-    #   lecture-feedback
+    #   open-cups
     #   streamlit-autorefresh
 streamlit-autorefresh==1.0.1 \
     --hash=sha256:8f0a772eff9d56807d19dc422e44ef92d900bbb22b1b85de31d8d82ea7d875f1 \
     --hash=sha256:a89abf23f2c4e52d37be442115cd5566b41f382e3c09ff08817e17a25f50b8ed
-    # via lecture-feedback
+    # via open-cups
 tenacity==9.1.2 \
     --hash=sha256:1169d376c297e7de388d18b4481760d478b0e99a777cad3a9c86e556f4b697cb \
     --hash=sha256:f77bf36710d8b73a50b2dd155c97b870017ad21afe6ab300326b0371b3b05138

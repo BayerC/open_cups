@@ -1,4 +1,4 @@
-from lecture_feedback.room import Room
+from open_cups.room import Room
 
 
 def test_upvote_nonexistent_question_does_not_crash() -> None:
