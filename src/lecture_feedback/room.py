@@ -9,21 +9,15 @@ from lecture_feedback.types import Question, StatusSnapshot, UserSession, UserSt
 
 
 class Room:
-    def __init__(
-        self,
-        room_id: str,
-        host_id: str,
-        snapshot_interval_seconds: int = 1,
-        max_snapshot_count: int = 100,
-    ) -> None:
+    def __init__(self, room_id: str, host_id: str) -> None:
         self._room_id = room_id
         self._sessions: ThreadSafeDict[UserSession] = ThreadSafeDict()
         self._host_id = host_id
         self._host_last_seen = time.time()
         self._questions: ThreadSafeDict[Question] = ThreadSafeDict()
         self._stats_tracker = StatsTracker(
-            snapshot_interval_seconds,
-            max_snapshot_count,
+            snapshot_interval_seconds=1,
+            max_snapshot_count=100,
         )
         self._lock = threading.RLock()
 
