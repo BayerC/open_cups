@@ -1,3 +1,4 @@
+import threading
 import time
 import uuid
 from collections.abc import Iterator
@@ -24,6 +25,7 @@ class Room:
             snapshot_interval_seconds,
             max_snapshot_count,
         )
+        self._lock = threading.RLock()
 
     def is_host(self, session_id: str) -> bool:
         return self._host_id == session_id
@@ -33,7 +35,8 @@ class Room:
 
     def set_session_status(self, session_id: str, status: UserStatus) -> None:
         self._sessions[session_id] = UserSession(status, time.time())
-        self._stats_tracker.record_status_snapshot(self._sessions.values())
+        with self._lock:
+            self._stats_tracker.record_status_snapshot(self._sessions.values())
 
     def get_session_status(self, session_id: str) -> UserStatus:
         return self._sessions[session_id].status
