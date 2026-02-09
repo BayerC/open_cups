@@ -1,7 +1,7 @@
 import time
 from collections.abc import Iterable
 
-from open_cups.types import StatusSnapshot, UserSession
+from open_cups.types import StatusSnapshot, UserSession, UserStatus
 
 
 class StatsTracker:
@@ -17,7 +17,7 @@ class StatsTracker:
             if time.time() - last_snapshot_time < self._snapshot_interval_seconds:
                 return
 
-        self._status_history.append(StatusSnapshot.from_user_sessions(user_sessions))
+        self._status_history.append(create_snapshot(user_sessions))
         if len(self._status_history) > self._max_snapshot_count:
             excess_count = len(self._status_history) - self._max_snapshot_count
             del self._status_history[:excess_count]
@@ -29,3 +29,20 @@ class StatsTracker:
     @property
     def session_start_time(self) -> float:
         return self._session_start_time
+
+
+def create_snapshot(user_sessions: Iterable[UserSession]) -> "StatusSnapshot":
+    snapshot = StatusSnapshot(
+        timestamp=time.time(),
+        counts={
+            UserStatus.GREEN: 0,
+            UserStatus.YELLOW: 0,
+            UserStatus.RED: 0,
+            UserStatus.UNKNOWN: 0,
+        },
+    )
+
+    for user_session in user_sessions:
+        snapshot.counts[user_session.status] += 1
+
+    return snapshot

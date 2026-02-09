@@ -1,5 +1,3 @@
-import time
-from collections.abc import Iterable
 from dataclasses import dataclass
 from enum import Enum
 
@@ -41,23 +39,3 @@ class Question:
 class StatusSnapshot:
     timestamp: float
     counts: dict[UserStatus, int]
-
-    @classmethod
-    def from_user_sessions(
-        cls,
-        user_sessions: Iterable[UserSession],
-    ) -> "StatusSnapshot":
-        snapshot = cls(
-            timestamp=time.time(),
-            counts={
-                UserStatus.GREEN: 0,
-                UserStatus.YELLOW: 0,
-                UserStatus.RED: 0,
-                UserStatus.UNKNOWN: 0,
-            },
-        )
-
-        for user_session in user_sessions:
-            snapshot.counts[user_session.status] += 1
-
-        return snapshot
