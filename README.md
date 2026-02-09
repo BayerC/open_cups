@@ -13,22 +13,9 @@ The app (currently beta, while https://github.com/BayerC/open_cups/milestone/1 i
 
 ##  Overview
 
-OpenCups is a simple, intuitive tool that enables real-time feedback from the audience to presenters.
-Participants use a simple traffic light system to signal their understanding:
-
-- 🟢 **Green** → Following easily
-- 🟡 **Yellow** → Need more explanation
-- 🔴 **Red** → Cannot follow
-
-The presenter sees a bar histogram of the current distribution and can then adapt to slow down when audiences struggle or speed up when everyone is on track.
-
-### How to use:
-Open https://open-cups.streamlit.app/ or [run locally](#run-locally)
-
-1. Create a room
-2. Share the link or room ID with the participants
-3. They will join your room and share their status anonymously
-4. The results will be shown as a bar diagram across all participants
+<p align="center">
+  <img src="docs/welcome_screen.png" alt="Welcome screen" width="600" style="border: 1px solid #ddd; border-radius: 8px;">
+</p>
 
 ## Run locally
 

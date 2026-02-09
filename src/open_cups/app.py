@@ -65,6 +65,17 @@ def show_room_selection_screen(lobby: LobbyState) -> None:
 
     st.divider()
 
+    st.subheader("The traffic light cups technique")
+    st.info(
+        "This system offers a simple, intuitive way to gather real-time audience feedback. "  # noqa: E501
+        "Participants indicate their level of understanding using a simple color code:\n\n"  # noqa: E501
+        "🟢 Green → Following easily  \n"
+        "🟡 Yellow → Need more explanation  \n"
+        "🔴 Red → Cannot follow\n\n"
+        "The presenter sees an aggregate view of the responses "
+        "and can adjust the lecture accordingly.",
+    )
+
     st.subheader("How to Use This App")
     step_col_1, step_col_2, step_col_3 = st.columns(3)
 
