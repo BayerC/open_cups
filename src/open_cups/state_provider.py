@@ -5,7 +5,7 @@ import streamlit as st
 from open_cups.application_state import ApplicationState
 from open_cups.room import Question, Room
 from open_cups.session_state import SessionState
-from open_cups.user_status import UserStatus
+from open_cups.types import UserStatus
 
 
 class LobbyState:

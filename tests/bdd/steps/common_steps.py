@@ -1,7 +1,7 @@
 from pytest_bdd import given, parsers, then, when
 from streamlit.testing.v1 import AppTest
 
-from open_cups.user_status import UserStatus
+from open_cups.types import UserStatus
 from tests.bdd.fixture import run_wrapper
 from tests.bdd.test_helper import get_room_id, refresh_all_apps
 

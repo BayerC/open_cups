@@ -13,7 +13,7 @@ from open_cups.state_provider import (
     RoomState,
     StateProvider,
 )
-from open_cups.user_status import UserStatus
+from open_cups.types import UserStatus
 
 AUTOREFRESH_INTERVAL_MS = 2000
 USER_REMOVAL_TIMEOUT_SECONDS = (
