@@ -31,7 +31,7 @@ class StatsTracker:
         return self._session_start_time
 
 
-def create_snapshot(user_sessions: Iterable[UserSession]) -> "StatusSnapshot":
+def create_snapshot(user_sessions: Iterable[UserSession]) -> StatusSnapshot:
     snapshot = StatusSnapshot(
         timestamp=time.time(),
         counts={
