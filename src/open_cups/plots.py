@@ -15,6 +15,11 @@ RED_COLOR = "#EF4444"
 YELLOW_COLOR = "#FBBF24"
 GREEN_COLOR = "#10B981"
 
+STREAMLIT_DISABLE_INTERACTIONS_CONFIG = {
+    "displayModeBar": False,
+    "staticPlot": True,
+}
+
 
 def get_statistics_data_frame(room: RoomState) -> pd.DataFrame:
     participants = room.get_room_participants()
@@ -65,14 +70,13 @@ def show_room_statistics(room: HostState | ClientState) -> None:
         marker_cornerradius=8,
     )
 
-    disable_interactions_config = {
-        "displayModeBar": False,
-        "staticPlot": True,
-    }
-
     left_col, _ = st.columns([3, 2])
     with left_col:
-        st.plotly_chart(fig, config=disable_interactions_config)
+        st.plotly_chart(
+            fig,
+            config=STREAMLIT_DISABLE_INTERACTIONS_CONFIG,
+            key="room_statistics_chart",
+        )
         participant_count = df.sum().sum()
         st.markdown(
             f"<p style='text-align: center;'>"
@@ -96,19 +100,11 @@ def show_status_history_chart(host_state: HostState) -> None:
             (snapshot.timestamp - latest_snapshot_time) / 60
             for snapshot in status_history
         ],
-        UserStatus.GREEN.value: [
-            snapshot.counts[UserStatus.GREEN] for snapshot in status_history
-        ],
-        UserStatus.YELLOW.value: [
-            snapshot.counts[UserStatus.YELLOW] for snapshot in status_history
-        ],
-        UserStatus.RED.value: [
-            snapshot.counts[UserStatus.RED] for snapshot in status_history
-        ],
-        UserStatus.UNKNOWN.value: [
-            snapshot.counts[UserStatus.UNKNOWN] for snapshot in status_history
-        ],
     }
+    for user_status in UserStatus:
+        data[user_status.value] = [
+            snapshot.counts[user_status] for snapshot in status_history
+        ]
 
     df = pd.DataFrame(data)
 
@@ -176,16 +172,11 @@ def show_status_history_chart(host_state: HostState) -> None:
         height=400,
     )
 
-    disable_interactions_config = {
-        "displayModeBar": False,
-        "staticPlot": True,
-    }
-
     # This flickers in many refreshes, even though we do basically the same as for
     # the bar chart. Is this acceptable?
     st.plotly_chart(
         fig,
         width="stretch",
-        config=disable_interactions_config,
+        config=STREAMLIT_DISABLE_INTERACTIONS_CONFIG,
         key="status_history_chart",
     )
