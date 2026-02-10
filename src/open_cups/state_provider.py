@@ -2,10 +2,10 @@ import uuid
 
 import streamlit as st
 
-from lecture_feedback.application_state import ApplicationState
-from lecture_feedback.room import Question, Room, StatusSnapshot
-from lecture_feedback.session_state import SessionState
-from lecture_feedback.user_status import UserStatus
+from open_cups.application_state import ApplicationState
+from open_cups.room import Question, Room, StatusSnapshot
+from open_cups.session_state import SessionState
+from open_cups.types import UserStatus
 
 
 class LobbyState:
@@ -62,6 +62,10 @@ class HostState(RoomState):
 
 
 class ClientState(RoomState):
+    def __init__(self, room: Room, session_id: str) -> None:
+        super().__init__(room, session_id)
+        self._room.update_session(session_id)
+
     def get_user_status(self) -> UserStatus:
         return self._room.get_session_status(self._session_id)
 

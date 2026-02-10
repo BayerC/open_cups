@@ -12,7 +12,8 @@ def test_client_submits_a_question() -> None:
 
 @when(parsers.parse('the second user submits a question "{question}"'))
 def second_user_submits_question(context: dict[str, AppTest], question: str) -> None:
-    context["second_user"].text_input(key="question_input").set_value(question).run()
+    context["second_user"].text_area(key="question_input").set_value(question).run()
+    context["second_user"].button(key="submit_question").click().run()
     refresh_all_apps(context)
 
 

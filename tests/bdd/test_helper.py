@@ -30,7 +30,9 @@ def check_page_contents(
 
 
 def get_room_id(app: AppTest) -> str:
-    if app.code:
-        return app.code[0].value
+    for markdown_element in app.markdown:
+        value = markdown_element.value
+        if value.startswith("**") and value.endswith("**"):
+            return value[2:-2]
     msg = "Room ID not found"
     raise AssertionError(msg)

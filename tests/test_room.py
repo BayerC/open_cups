@@ -1,7 +1,6 @@
 import pytest
 
-from lecture_feedback.room import Room
-from lecture_feedback.user_status import UserStatus
+from open_cups.room import Room
 
 
 def test_upvote_nonexistent_question_does_not_crash() -> None:
@@ -96,53 +95,9 @@ def test_questions_sorted_by_vote_count() -> None:
     assert sorted_questions[2].vote_count == 1
 
 
-def test_status_history_snapshot_interval(monkeypatch: pytest.MonkeyPatch) -> None:
-    current_time = 10.0
+def test_integration_with_stats_tracker(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setattr("open_cups.room.time.time", lambda: 10.0)
+    room = Room("room-id", "host-id")
 
-    def fake_time() -> float:
-        return current_time
-
-    monkeypatch.setattr("lecture_feedback.room.time.time", fake_time)
-
-    room = Room("room-id", "host-id", snapshot_interval_seconds=1)
-
-    room.set_session_status("user-1", UserStatus.GREEN)
-    history = room.get_status_history()
-    assert len(history) == 1
-    assert history[0].green_count == 1
-    assert history[0].yellow_count == 0
-    assert history[0].red_count == 0
-    assert history[0].unknown_count == 0
-
-    room.set_session_status("user-2", UserStatus.YELLOW)
-    assert len(room.get_status_history()) == 1
-
-    current_time = 11.0
-    room.set_session_status("user-2", UserStatus.YELLOW)
-    history = room.get_status_history()
-    assert len(history) == 2
-    assert history[-1].green_count == 1
-    assert history[-1].yellow_count == 1
-
-
-def test_status_history_trims_old_snapshots(monkeypatch: pytest.MonkeyPatch) -> None:
-    current_time = 0.0
-
-    def fake_time() -> float:
-        return current_time
-
-    monkeypatch.setattr("lecture_feedback.room.time.time", fake_time)
-
-    room = Room("room-id", "host-id", snapshot_interval_seconds=0, max_snapshot_count=2)
-
-    current_time = 1.0
-    room.set_session_status("user-1", UserStatus.GREEN)
-    current_time = 2.0
-    room.set_session_status("user-2", UserStatus.YELLOW)
-    current_time = 3.0
-    room.set_session_status("user-3", UserStatus.RED)
-
-    history = room.get_status_history()
-    assert len(history) == 2
-    assert history[0].timestamp == 2.0
-    assert history[1].timestamp == 3.0
+    assert room.get_status_history() == []
+    assert room.session_start_time > 0

@@ -4,16 +4,16 @@ import qrcode
 import streamlit as st
 from streamlit_autorefresh import st_autorefresh
 
-from lecture_feedback.plots import show_room_statistics, show_status_history_chart
-from lecture_feedback.state_provider import (
+from open_cups.plots import show_room_statistics, show_status_history_chart
+from open_cups.state_provider import (
     ClientState,
     HostState,
     LobbyState,
     StateProvider,
 )
-from lecture_feedback.user_status import UserStatus
+from open_cups.types import UserStatus
 
-AUTOREFRESH_INTERNAL_MS = 2000
+AUTOREFRESH_INTERVAL_MS = 2000
 USER_REMOVAL_TIMEOUT_SECONDS = (
     60  # if we go lower, chrome's background tab throttling causes faulty user removal
 )
@@ -27,7 +27,7 @@ def show_room_selection_screen(lobby: LobbyState) -> None:
         except ValueError:
             st.error("Room ID from URL not found")
 
-    st.title("Welcome to Lecture Feedback App")
+    st.title("Welcome to OpenCups")
     st.write("Host or join a room to share feedback.")
 
     col_left, col_right = st.columns(2, gap="medium")
@@ -40,7 +40,12 @@ def show_room_selection_screen(lobby: LobbyState) -> None:
 
     with col_right:
         st.subheader("Join Existing Room")
-        room_id = st.text_input("Room ID", key="join_room_id")
+        room_id = st.text_input(
+            "Room ID",
+            key="join_room_id",
+            placeholder="Insert room ID",
+            label_visibility="collapsed",
+        )
         if st.button("Join Room", width="stretch", key="join_room"):
             if not room_id:
                 st.warning("Please enter a Room ID to join.")
@@ -50,6 +55,31 @@ def show_room_selection_screen(lobby: LobbyState) -> None:
                     st.rerun()
                 except ValueError:
                     st.error("Room ID not found")
+
+    st.divider()
+
+    st.subheader("How to Use This App")
+    step_col_1, step_col_2, step_col_3 = st.columns(3)
+
+    with step_col_1:
+        st.info(
+            "**1. Create a Room**\n\n"
+            "The presenter starts a new session, which generates a unique room.",
+        )
+
+    with step_col_2:
+        st.info(
+            "**2. Share the Access Link**\n\n"
+            "The presenter shares the room ID, a direct link, "
+            "or a QR code with the audience.",
+        )
+
+    with step_col_3:
+        st.info(
+            "**3. Gather Live Feedback**\n\n"
+            "Participants join to share their status "
+            "and ask/vote on questions.",
+        )
 
 
 def show_user_status_selection(room: ClientState) -> None:
@@ -88,6 +118,7 @@ def generate_qr_code_image(room_id: str) -> bytes:
 
     url_qr_code = qrcode.QRCode(
         border=0,
+        box_size=3,
     )
     url_qr_code.add_data(join_url)
     url_qr_code.make(fit=True)
@@ -100,17 +131,15 @@ def generate_qr_code_image(room_id: str) -> bytes:
 
 def show_active_room_header(room_id: str) -> None:
     st.query_params["room_id"] = room_id
-    left, right = st.columns([4, 1], vertical_alignment="center")
-    with left:
-        st.title("Active Room")
-    with right:
-        st.image(generate_qr_code_image(room_id), width="content")
+    st.title("Active Room")
+    left_col, right_col = st.columns([2, 1], gap="large")
 
-    col_1, col_2 = st.columns([1, 4], vertical_alignment="center")
-    with col_1:
-        st.write("**Room ID:**")
-    with col_2:
-        st.code(room_id, language=None)
+    with left_col:
+        st.subheader("Room ID")
+        st.markdown(f"**{room_id}**")
+        st.caption("Share this ID with participants to let them join")
+    with right_col:
+        st.image(generate_qr_code_image(room_id), width="content")
 
     st.divider()
 
@@ -121,25 +150,28 @@ def show_open_questions(state: HostState | ClientState) -> None:
     if not open_questions:
         st.info("No questions yet.")
     else:
+        left_col, right_col = st.columns([8, 1], vertical_alignment="center")
         for question in open_questions:
-            col1, col3 = st.columns([5, 1], vertical_alignment="center")
-            with col1:
-                st.write(question.text)
-            with col3:
+            with left_col:
+                st.info(question.text)
+            with right_col:
                 if isinstance(state, HostState):
                     if st.button(
                         f"{question.vote_count} ✅",
                         key=f"close_{question.id}",
                         help="Close question",
+                        width="stretch",
                     ):
                         state.close_question(question.id)
                         st.rerun()
                 elif isinstance(state, ClientState):
                     has_voted = state.has_voted(question)
                     if st.button(
-                        f"{question.vote_count} 🆙",
+                        f"{question.vote_count} ⬆️",
                         key=f"upvote_{question.id}",
                         disabled=has_voted,
+                        help="Vote for question",
+                        width="stretch",
                     ):
                         state.upvote_question(question.id)
                         st.rerun()
@@ -173,28 +205,30 @@ def show_active_room_client(client_state: ClientState) -> None:
     with col_right:
         show_room_statistics(client_state)
 
-    st.divider()
-
     def handle_question_submit() -> None:
         question = st.session_state.question_input
         if question and question.strip():
             client_state.submit_question(question.strip())
             st.session_state.question_input = ""
 
-    st.text_input(
-        "Ask a Question",
-        key="question_input",
-        placeholder="Type your question here... (Press Enter to submit)",
-        on_change=handle_question_submit,
-    )
+    with st.form("question_form"):
+        st.text_area(
+            "Ask a Question",
+            key="question_input",
+            placeholder="Type your question here...",
+        )
 
-    st.divider()
+        st.form_submit_button(
+            "Submit Question",
+            key="submit_question",
+            on_click=handle_question_submit,
+        )
 
     show_open_questions(client_state)
 
 
 def run() -> None:
-    st_autorefresh(interval=AUTOREFRESH_INTERNAL_MS, key="data_refresh")
+    st_autorefresh(interval=AUTOREFRESH_INTERVAL_MS, key="data_refresh")
 
     state_provider = StateProvider()
     cleanup = state_provider.get_cleanup(USER_REMOVAL_TIMEOUT_SECONDS)

@@ -3,12 +3,12 @@ import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
 
-from lecture_feedback.state_provider import (
+from open_cups.state_provider import (
     ClientState,
     HostState,
     RoomState,
 )
-from lecture_feedback.user_status import UserStatus
+from open_cups.types import UserStatus
 
 GREY_COLOR = "#9CA3AF"
 RED_COLOR = "#EF4444"
@@ -16,7 +16,25 @@ YELLOW_COLOR = "#FBBF24"
 GREEN_COLOR = "#10B981"
 
 
+def get_statistics_data_frame(room: RoomState) -> pd.DataFrame:
+    participants = room.get_room_participants()
+    counts = {
+        status.value: sum(1 for _, s in participants if s == status)
+        for status in UserStatus
+    }
+    df = pd.DataFrame([counts])
+    # Reorder columns: UNKNOWN (bottom), RED, YELLOW, GREEN (top)
+    column_order = [
+        UserStatus.UNKNOWN.value,
+        UserStatus.RED.value,
+        UserStatus.YELLOW.value,
+        UserStatus.GREEN.value,
+    ]
+    return df[[col for col in column_order if col in df.columns]]
+
+
 def show_room_statistics(room: HostState | ClientState) -> None:
+    st.subheader("Room Overview")
     df = get_statistics_data_frame(room)
 
     if df.sum().sum() == 0:
@@ -43,13 +61,17 @@ def show_room_statistics(room: HostState | ClientState) -> None:
         height=250,
     )
 
+    fig.update_traces(
+        marker_cornerradius=8,
+    )
+
     disable_interactions_config = {
         "displayModeBar": False,
         "staticPlot": True,
     }
 
-    _, col2, _ = st.columns([1, 3, 1])
-    with col2:
+    left_col, _ = st.columns([3, 2])
+    with left_col:
         st.plotly_chart(fig, config=disable_interactions_config)
         participant_count = df.sum().sum()
         st.markdown(
@@ -58,23 +80,6 @@ def show_room_statistics(room: HostState | ClientState) -> None:
             f"</p>",
             unsafe_allow_html=True,
         )
-
-
-def get_statistics_data_frame(room: RoomState) -> pd.DataFrame:
-    participants = room.get_room_participants()
-    counts = {
-        status.value: sum(1 for _, s in participants if s == status)
-        for status in UserStatus
-    }
-    df = pd.DataFrame([counts])
-    # Reorder columns: UNKNOWN (bottom), RED, YELLOW, GREEN (top)
-    column_order = [
-        UserStatus.UNKNOWN.value,
-        UserStatus.RED.value,
-        UserStatus.YELLOW.value,
-        UserStatus.GREEN.value,
-    ]
-    return df[[col for col in column_order if col in df.columns]]
 
 
 def show_status_history_chart(host_state: HostState) -> None:
@@ -91,11 +96,17 @@ def show_status_history_chart(host_state: HostState) -> None:
             (snapshot.timestamp - latest_snapshot_time) / 60
             for snapshot in status_history
         ],
-        UserStatus.GREEN.value: [snapshot.green_count for snapshot in status_history],
-        UserStatus.YELLOW.value: [snapshot.yellow_count for snapshot in status_history],
-        UserStatus.RED.value: [snapshot.red_count for snapshot in status_history],
+        UserStatus.GREEN.value: [
+            snapshot.counts[UserStatus.GREEN] for snapshot in status_history
+        ],
+        UserStatus.YELLOW.value: [
+            snapshot.counts[UserStatus.YELLOW] for snapshot in status_history
+        ],
+        UserStatus.RED.value: [
+            snapshot.counts[UserStatus.RED] for snapshot in status_history
+        ],
         UserStatus.UNKNOWN.value: [
-            snapshot.unknown_count for snapshot in status_history
+            snapshot.counts[UserStatus.UNKNOWN] for snapshot in status_history
         ],
     }
 

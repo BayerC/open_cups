@@ -1,55 +1,25 @@
+import threading
 import time
 import uuid
 from collections.abc import Iterator
-from dataclasses import dataclass
 
-from lecture_feedback.thread_safe_dict import ThreadSafeDict
-from lecture_feedback.user_status import UserStatus
-
-
-@dataclass
-class UserSession:
-    status: UserStatus
-    last_seen: float
-
-
-@dataclass
-class Question:
-    id: str
-    text: str
-    voter_ids: set[str]
-
-    @property
-    def vote_count(self) -> int:
-        return len(self.voter_ids)
-
-
-@dataclass
-class StatusSnapshot:
-    timestamp: float
-    green_count: int
-    yellow_count: int
-    red_count: int
-    unknown_count: int
+from open_cups.stats_tracker import StatsTracker
+from open_cups.thread_safe_dict import ThreadSafeDict
+from open_cups.types import Question, StatusSnapshot, UserSession, UserStatus
 
 
 class Room:
-    def __init__(
-        self,
-        room_id: str,
-        host_id: str,
-        snapshot_interval_seconds: int = 1,
-        max_snapshot_count: int = 100,
-    ) -> None:
+    def __init__(self, room_id: str, host_id: str) -> None:
         self._room_id = room_id
         self._sessions: ThreadSafeDict[UserSession] = ThreadSafeDict()
         self._host_id = host_id
         self._host_last_seen = time.time()
         self._questions: ThreadSafeDict[Question] = ThreadSafeDict()
-        self._status_history: list[StatusSnapshot] = []
-        self._session_start_time = time.time()
-        self._snapshot_interval_seconds = snapshot_interval_seconds
-        self._max_snapshot_count = max_snapshot_count
+        self._stats_tracker = StatsTracker(
+            snapshot_interval_seconds=1,
+            max_snapshot_count=100,
+        )
+        self._lock = threading.RLock()
 
     def is_host(self, session_id: str) -> bool:
         return self._host_id == session_id
@@ -57,43 +27,20 @@ class Room:
     def update_host_last_seen(self) -> None:
         self._host_last_seen = time.time()
 
-    def _record_status_snapshot(self) -> None:
-        if self._status_history:
-            last_snapshot_time = self._status_history[-1].timestamp
-            if time.time() - last_snapshot_time < self._snapshot_interval_seconds:
-                return
-
-        counts = {
-            UserStatus.GREEN: 0,
-            UserStatus.YELLOW: 0,
-            UserStatus.RED: 0,
-            UserStatus.UNKNOWN: 0,
-        }
-        for user_session in self._sessions.values():
-            counts[user_session.status] += 1
-
-        snapshot = StatusSnapshot(
-            timestamp=time.time(),
-            green_count=counts[UserStatus.GREEN],
-            yellow_count=counts[UserStatus.YELLOW],
-            red_count=counts[UserStatus.RED],
-            unknown_count=counts[UserStatus.UNKNOWN],
-        )
-        self._status_history.append(snapshot)
-        if len(self._status_history) > self._max_snapshot_count:
-            excess_count = len(self._status_history) - self._max_snapshot_count
-            del self._status_history[:excess_count]
-
     def set_session_status(self, session_id: str, status: UserStatus) -> None:
         self._sessions[session_id] = UserSession(status, time.time())
-        self._record_status_snapshot()
+        with self._lock:
+            self._stats_tracker.record_status_snapshot(self._sessions.values())
 
     def get_session_status(self, session_id: str) -> UserStatus:
         return self._sessions[session_id].status
 
-    def has_session(self, session_id: str) -> bool:
+    def update_session(self, session_id: str) -> None:
         if session_id in self._sessions:
             self._sessions[session_id].last_seen = time.time()
+
+    def has_session(self, session_id: str) -> bool:
+        if session_id in self._sessions:
             return True
         return bool(self.is_host(session_id))
 
@@ -144,8 +91,8 @@ class Room:
         del self._questions[question_id]
 
     def get_status_history(self) -> list[StatusSnapshot]:
-        return self._status_history
+        return self._stats_tracker.status_history
 
     @property
     def session_start_time(self) -> float:
-        return self._session_start_time
+        return self._stats_tracker.session_start_time
