@@ -34,8 +34,10 @@ def show_room_selection_screen(lobby: LobbyState) -> None:
         except ValueError:
             st.error("Room ID from URL not found")
 
-    st.title("Welcome to OpenCups")
-    st.write("Host or join a room to share feedback.")
+    left, _ = st.columns(2, gap="medium")
+    with left:
+        st.title("Welcome to OpenCups")
+        st.write("Host or join a room to share feedback.")
 
     col_left, col_right = st.columns(2, gap="medium")
 
