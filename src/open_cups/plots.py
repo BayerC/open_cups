@@ -15,7 +15,7 @@ RED_COLOR = "#EF4444"
 YELLOW_COLOR = "#FBBF24"
 GREEN_COLOR = "#10B981"
 
-STATUS_COLOR_MAP = [
+ORDERED_STATUS_COLOR_MAP = [
     (UserStatus.UNKNOWN, GREY_COLOR),
     (UserStatus.RED, RED_COLOR),
     (UserStatus.YELLOW, YELLOW_COLOR),
@@ -57,7 +57,7 @@ def show_room_statistics(room: HostState | ClientState) -> None:
         df,
         x=df.index,
         y=df.columns,
-        color_discrete_sequence=[color for _, color in STATUS_COLOR_MAP],
+        color_discrete_sequence=[color for _, color in ORDERED_STATUS_COLOR_MAP],
     )
 
     fig.update_layout(
@@ -112,7 +112,7 @@ def show_status_history_chart(host_state: HostState) -> None:
 
     fig = go.Figure()
 
-    for user_status, color in STATUS_COLOR_MAP:
+    for user_status, color in ORDERED_STATUS_COLOR_MAP:
         fig.add_trace(
             go.Scatter(
                 x=df["Time (minutes)"],
