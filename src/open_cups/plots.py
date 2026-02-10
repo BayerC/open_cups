@@ -35,13 +35,7 @@ def get_statistics_data_frame(room: RoomState) -> pd.DataFrame:
         for status in UserStatus
     }
     df = pd.DataFrame([counts])
-    # Reorder columns: UNKNOWN (bottom), RED, YELLOW, GREEN (top)
-    column_order = [
-        UserStatus.UNKNOWN.value,
-        UserStatus.RED.value,
-        UserStatus.YELLOW.value,
-        UserStatus.GREEN.value,
-    ]
+    column_order = [status.value for status, _ in ORDERED_STATUS_COLOR_MAP]
     return df[[col for col in column_order if col in df.columns]]
 
 
