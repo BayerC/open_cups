@@ -56,10 +56,6 @@ class HostState(RoomState):
     def get_status_history(self) -> list[StatusSnapshot]:
         return self._room.get_status_history()
 
-    @property
-    def session_start_time(self) -> float:
-        return self._room.session_start_time
-
 
 class ClientState(RoomState):
     def __init__(self, room: Room, session_id: str) -> None:

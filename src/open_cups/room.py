@@ -92,7 +92,3 @@ class Room:
 
     def get_status_history(self) -> list[StatusSnapshot]:
         return self._stats_tracker.status_history
-
-    @property
-    def session_start_time(self) -> float:
-        return self._stats_tracker.session_start_time

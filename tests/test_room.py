@@ -100,4 +100,3 @@ def test_integration_with_stats_tracker(monkeypatch: pytest.MonkeyPatch) -> None
     room = Room("room-id", "host-id")
 
     assert room.get_status_history() == []
-    assert room.session_start_time > 0
