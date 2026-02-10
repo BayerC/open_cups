@@ -15,6 +15,13 @@ RED_COLOR = "#EF4444"
 YELLOW_COLOR = "#FBBF24"
 GREEN_COLOR = "#10B981"
 
+STATUS_COLOR_MAP = [
+    (UserStatus.UNKNOWN, GREY_COLOR),
+    (UserStatus.RED, RED_COLOR),
+    (UserStatus.YELLOW, YELLOW_COLOR),
+    (UserStatus.GREEN, GREEN_COLOR),
+]
+
 STREAMLIT_DISABLE_INTERACTIONS_CONFIG = {
     "displayModeBar": False,
     "staticPlot": True,
@@ -50,12 +57,7 @@ def show_room_statistics(room: HostState | ClientState) -> None:
         df,
         x=df.index,
         y=df.columns,
-        color_discrete_sequence=[
-            GREY_COLOR,
-            RED_COLOR,
-            YELLOW_COLOR,
-            GREEN_COLOR,
-        ],
+        color_discrete_sequence=[color for _, color in STATUS_COLOR_MAP],
     )
 
     fig.update_layout(
@@ -110,49 +112,17 @@ def show_status_history_chart(host_state: HostState) -> None:
 
     fig = go.Figure()
 
-    fig.add_trace(
-        go.Scatter(
-            x=df["Time (minutes)"],
-            y=df[UserStatus.UNKNOWN.value],
-            name=UserStatus.UNKNOWN.value,
-            mode="lines",
-            line={"color": GREY_COLOR, "width": 2},
-            stackgroup="one",
-        ),
-    )
-
-    fig.add_trace(
-        go.Scatter(
-            x=df["Time (minutes)"],
-            y=df[UserStatus.RED.value],
-            name=UserStatus.RED.value,
-            mode="lines",
-            line={"color": RED_COLOR, "width": 2},
-            stackgroup="one",
-        ),
-    )
-
-    fig.add_trace(
-        go.Scatter(
-            x=df["Time (minutes)"],
-            y=df[UserStatus.YELLOW.value],
-            name=UserStatus.YELLOW.value,
-            mode="lines",
-            line={"color": YELLOW_COLOR, "width": 2},
-            stackgroup="one",
-        ),
-    )
-
-    fig.add_trace(
-        go.Scatter(
-            x=df["Time (minutes)"],
-            y=df[UserStatus.GREEN.value],
-            name=UserStatus.GREEN.value,
-            mode="lines",
-            line={"color": GREEN_COLOR, "width": 2},
-            stackgroup="one",
-        ),
-    )
+    for user_status, color in STATUS_COLOR_MAP:
+        fig.add_trace(
+            go.Scatter(
+                x=df["Time (minutes)"],
+                y=df[user_status.value],
+                name=user_status.value,
+                mode="lines",
+                line={"color": color, "width": 2},
+                stackgroup="one",
+            ),
+        )
 
     fig.add_vline(
         x=0,
