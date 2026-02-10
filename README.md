@@ -28,9 +28,9 @@ The presenter sees an aggregate view of the responses and can adjust the lecture
 ### How to Use This App:
 Open https://open-cups.streamlit.app/ or [run locally](#run-locally)
 
-1. **Create a Room**
+1. **Create a Room:**
 The presenter starts a new session, which generates a unique room.
-2. **Share the Access Link**
+2. **Share the Access Link:**
 The presenter shares the room ID, a direct link, or a QR code with the audience.
 3. **Gather Live Feedback:**
 Participants join to share their status and ask/vote on questions.
