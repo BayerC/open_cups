@@ -65,6 +65,23 @@ def show_room_selection_screen(lobby: LobbyState) -> None:
 
     st.divider()
 
+    source_1 = "https://cloudfront-s3.solutiontree.com/pdfs/Reproducibles_EFA/The-Main-Idea-Embedded-Formative-Assessment-March-2013.pdf"
+    source_2 = (
+        "https://www.nwesd.org/wp-content/uploads/2013/08/PROL_Colored_Cups_kdj.pdf"
+    )
+    st.markdown(
+        f"### The traffic light cups technique [[1]]({source_1}) [[2]]({source_2})",
+    )
+    st.info(
+        "This system offers a simple, intuitive way to gather real-time audience feedback. "  # noqa: E501
+        "Participants indicate their level of understanding (originally done plastic cups) using a simple color code:\n\n"  # noqa: E501
+        "🟢 Green → Following easily  \n"
+        "🟡 Yellow → Need more explanation  \n"
+        "🔴 Red → Cannot follow\n\n"
+        "The presenter sees an aggregate view of the responses "
+        "and can adjust the lecture accordingly.",
+    )
+
     st.subheader("How to Use This App")
     step_col_1, step_col_2, step_col_3 = st.columns(3)
 
