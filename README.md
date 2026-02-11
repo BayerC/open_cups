@@ -12,24 +12,30 @@
 
 The app (currently beta, while https://github.com/BayerC/open_cups/milestone/1 is not done) is available at <https://open-cups.streamlit.app/>.
 
-##  Overview
+##  The traffic light cups technique  [[1]](https://cloudfront-s3.solutiontree.com/pdfs/Reproducibles_EFA/The-Main-Idea-Embedded-Formative-Assessment-March-2013.pdf) [[2]](https://www.nwesd.org/wp-content/uploads/2013/08/PROL_Colored_Cups_kdj.pdf)
 
-OpenCups is a simple, intuitive tool that enables real-time feedback from the audience to presenters.
-Participants use a simple traffic light system to signal their understanding:
 
-- 🟢 **Green** → Following easily
-- 🟡 **Yellow** → Need more explanation
-- 🔴 **Red** → Cannot follow
+This system offers a simple, intuitive way to gather real-time audience feedback.
+Participants indicate their level of understanding (originally done plastic cups) using a simple color code:
 
-The presenter sees a bar histogram of the current distribution and can then adapt to slow down when audiences struggle or speed up when everyone is on track.
+🟢 Green → Following easily
 
-### How to use:
+🟡 Yellow → Need more explanation
+
+🔴 Red → Cannot follow
+
+The presenter sees an aggregate view of the responses and can adjust the lecture accordingly.
+
+### How to Use This App:
 Open https://open-cups.streamlit.app/ or [run locally](#run-locally)
 
-1. Create a room
-2. Share the link or room ID with the participants
-3. They will join your room and share their status anonymously
-4. The results will be shown as a bar diagram across all participants
+1. **Create a Room:**
+The presenter starts a new session, which generates a unique room.
+2. **Share the Access Link:**
+The presenter shares the room ID, a direct link, or a QR code with the audience.
+3. **Gather Live Feedback:**
+Participants join to share their status and ask/vote on questions.
+
 
 ## Run locally
 
