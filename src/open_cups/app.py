@@ -105,6 +105,18 @@ def show_room_selection_screen(lobby: LobbyState) -> None:
             "and ask/vote on questions.",
         )
 
+    st.markdown(
+        """
+    <p style='text-align: center; margin-top: 2rem;'>
+        <a href='https://ko-fi.com/opencups' target='_blank'>
+            <img src='https://img.shields.io/badge/Support%20us%20on-Ko--fi-FF5E5B?logo=ko-fi&logoColor=white'
+                 alt='Support on Ko-fi' />
+        </a>
+    </p>
+    """,
+        unsafe_allow_html=True,
+    )
+
 
 def show_user_status_selection(room: ClientState) -> None:
     st.subheader("Your Status")
