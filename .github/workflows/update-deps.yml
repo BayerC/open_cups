@@ -20,7 +20,7 @@ jobs:
       - run: uv lock --upgrade
       - run: uv sync
 
-      - uses: peter-evans/create-pull-request@v7
+      - uses: peter-evans/create-pull-request@v8.1.0
         with:
           branch: deps/auto-update
           title: "chore: update dependencies"
