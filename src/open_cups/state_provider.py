@@ -3,7 +3,7 @@ import uuid
 import streamlit as st
 
 from open_cups.application_state import ApplicationState
-from open_cups.room import Question, Room
+from open_cups.room import Question, Room, StatusSnapshot
 from open_cups.session_state import SessionState
 from open_cups.types import UserStatus
 
@@ -52,6 +52,9 @@ class HostState(RoomState):
 
     def close_question(self, question_id: str) -> None:
         self._room.close_question(question_id)
+
+    def get_status_history(self) -> list[StatusSnapshot]:
+        return self._room.get_status_history()
 
 
 class ClientState(RoomState):

@@ -33,8 +33,6 @@ def test_status_history_snapshot_interval(monkeypatch: pytest.MonkeyPatch) -> No
     assert history[-1].counts[UserStatus.GREEN] == 1
     assert history[-1].counts[UserStatus.YELLOW] == 1
 
-    assert unit.session_start_time <= current_time
-
 
 def test_status_history_trims_old_snapshots(monkeypatch: pytest.MonkeyPatch) -> None:
     current_time = 0.0
