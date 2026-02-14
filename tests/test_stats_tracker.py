@@ -14,8 +14,8 @@ def test_config_errors() -> None:
     with pytest.raises(ValueError, match="dense_interval_window must be >= 0"):
         Config(dense_interval_window_seconds=-1)
 
-    with pytest.raises(ValueError, match="max_snapshot_count must be > 0"):
-        Config(max_snapshot_count=0)
+    with pytest.raises(ValueError, match="max_sparse_snapshot_count must be > 0"):
+        Config(max_sparse_snapshot_count=0)
 
     with pytest.raises(
         ValueError,
@@ -60,9 +60,9 @@ def test_status_history_snapshot_interval(fake_time: FakeTime) -> None:
     unit = StatsTracker(
         config=Config(
             dense_snapshot_interval_seconds=1,
-            sparse_snapshot_interval_seconds=10,
             dense_interval_window_seconds=100,
-            max_snapshot_count=10,
+            sparse_snapshot_interval_seconds=10,
+            max_sparse_snapshot_count=10,
         ),
     )
 
@@ -90,32 +90,35 @@ def test_status_history_trims_old_snapshots(fake_time: FakeTime) -> None:
     unit = StatsTracker(
         config=Config(
             dense_snapshot_interval_seconds=1,
-            sparse_snapshot_interval_seconds=10,
-            dense_interval_window_seconds=100,
-            max_snapshot_count=2,
+            dense_interval_window_seconds=10,
+            sparse_snapshot_interval_seconds=5,
+            max_sparse_snapshot_count=2,
         ),
     )
 
     fake_time.current_time = 1.0
     unit.record_status_snapshot([UserSession(UserStatus.GREEN, 0.0)])
-    fake_time.current_time = 2.0
+    fake_time.current_time = 6.0
     unit.record_status_snapshot([UserSession(UserStatus.YELLOW, 0.0)])
-    fake_time.current_time = 3.0
+    fake_time.current_time = 11.0
     unit.record_status_snapshot([UserSession(UserStatus.RED, 0.0)])
+    fake_time.current_time = 27.0
+    unit.record_status_snapshot([UserSession(UserStatus.GREEN, 0.0)])
 
     history = unit.status_history
-    assert len(history) == 2
-    assert history[0].timestamp == 2.0
-    assert history[1].timestamp == 3.0
+    assert len(history) == 3
+    assert history[0].timestamp == 6.0
+    assert history[1].timestamp == 11.0
+    assert history[2].timestamp == 27.0
 
 
 def test_sparse_sampling_outside_dense_window(fake_time: FakeTime) -> None:
     unit = StatsTracker(
         Config(
             dense_snapshot_interval_seconds=1,
-            sparse_snapshot_interval_seconds=5,
             dense_interval_window_seconds=10,
-            max_snapshot_count=1000,
+            sparse_snapshot_interval_seconds=5,
+            max_sparse_snapshot_count=1000,
         ),
     )
 
@@ -145,9 +148,9 @@ def test_throw_away_samples_called_with_higher_frequency(fake_time: FakeTime) ->
     unit = StatsTracker(
         Config(
             dense_snapshot_interval_seconds=5,
-            sparse_snapshot_interval_seconds=30,
             dense_interval_window_seconds=30,
-            max_snapshot_count=1000,
+            sparse_snapshot_interval_seconds=30,
+            max_sparse_snapshot_count=1000,
         ),
     )
 
