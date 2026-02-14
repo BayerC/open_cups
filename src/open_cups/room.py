@@ -16,7 +16,9 @@ class Room:
         self._host_last_seen = time.time()
         self._questions: ThreadSafeDict[Question] = ThreadSafeDict()
         self._stats_tracker = StatsTracker(
-            snapshot_interval_seconds=60,
+            dense_snapshot_interval_seconds=10,
+            sparse_snapshot_interval_seconds=60,
+            dense_interval_window_seconds=300,
             max_snapshot_count=1000,
         )
         self._lock = threading.RLock()
