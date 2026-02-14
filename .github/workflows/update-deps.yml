@@ -3,7 +3,7 @@ name: Update dependencies
 
 on:
   schedule:
-    - cron: "0 9 * * 6"
+    - cron: "0 9 * * 0"
   workflow_dispatch:
 
 jobs:
@@ -19,6 +19,7 @@ jobs:
 
       - run: uv lock --upgrade
       - run: uv sync
+      - run: uv export --no-dev --format requirements-txt --output-file requirements.txt
 
       - uses: peter-evans/create-pull-request@v8.1.0
         with:
