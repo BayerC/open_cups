@@ -45,16 +45,29 @@ class StatsTracker:
     def record_status_snapshot(self, user_sessions: Iterable[UserSession]) -> None:
         current_time = time.time()
 
-        if self._dense_status_history:
-            last_snapshot_time = self._dense_status_history[-1].timestamp
-            if (
-                current_time - last_snapshot_time
-                < self._config.dense_snapshot_interval_seconds
-            ):
-                return
+        if not self._want_to_record_snapshot(current_time):
+            return
 
         self._dense_status_history.append(create_snapshot(user_sessions))
 
+        snapshots_to_move = self._extract_old_snapshots_from_dense_history(current_time)
+        self._append_to_sparse_history(snapshots_to_move)
+        self._prune_sparse_history_if_needed()
+
+    def _want_to_record_snapshot(self, current_time: float) -> bool:
+        if not self._dense_status_history:
+            return True
+
+        last_snapshot_time = self._dense_status_history[-1].timestamp
+        return (
+            current_time - last_snapshot_time
+            >= self._config.dense_snapshot_interval_seconds
+        )
+
+    def _extract_old_snapshots_from_dense_history(
+        self,
+        current_time: float,
+    ) -> list[StatusSnapshot]:
         dense_cutoff_time = current_time - self._config.dense_interval_window_seconds
 
         split_index = bisect.bisect_left(
@@ -62,10 +75,12 @@ class StatsTracker:
             dense_cutoff_time,
             key=lambda s: s.timestamp,
         )
-        snapshots_to_move = self._dense_status_history[:split_index]
+        old_snapshots = self._dense_status_history[:split_index]
         self._dense_status_history = self._dense_status_history[split_index:]
+        return old_snapshots
 
-        for snapshot in snapshots_to_move:
+    def _append_to_sparse_history(self, snapshots: list[StatusSnapshot]) -> None:
+        for snapshot in snapshots:
             if not self._sparse_status_history:
                 self._sparse_status_history.append(snapshot)
             else:
@@ -74,14 +89,17 @@ class StatsTracker:
                     snapshot.timestamp - last_sparse_time
                     >= self._config.sparse_snapshot_interval_seconds
                 ):
+                    # we could also drop it if it's equal to the last sparse snapshot
                     self._sparse_status_history.append(snapshot)
 
-        if len(self._sparse_status_history) > self._config.max_sparse_snapshot_count:
-            excess_count = (
-                len(self._sparse_status_history)
-                - self._config.max_sparse_snapshot_count
-            )
-            del self._sparse_status_history[:excess_count]
+    def _prune_sparse_history_if_needed(self) -> None:
+        excess_count = (
+            len(self._sparse_status_history) - self._config.max_sparse_snapshot_count
+        )
+        if excess_count <= 0:
+            return
+
+        del self._sparse_status_history[:excess_count]
 
     @property
     def status_history(self) -> list[StatusSnapshot]:
