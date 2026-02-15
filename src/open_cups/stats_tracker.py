@@ -89,7 +89,6 @@ class StatsTracker:
                     snapshot.timestamp - last_sparse_time
                     >= self._config.sparse_snapshot_interval_seconds
                 ):
-                    # we could also drop it if it's equal to the last sparse snapshot
                     self._sparse_status_history.append(snapshot)
 
     def _prune_sparse_history_if_needed(self) -> None:
