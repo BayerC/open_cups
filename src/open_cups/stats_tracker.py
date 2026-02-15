@@ -9,7 +9,7 @@ from open_cups.types import StatusSnapshot, UserSession, UserStatus
 @dataclass
 class Config:
     dense_snapshot_interval_seconds: int = 1
-    dense_interval_window_seconds: int = 60
+    dense_sampling_window_seconds: int = 60
     sparse_snapshot_interval_seconds: int = 60
     max_sparse_snapshot_count: int = 1000
 
@@ -20,11 +20,11 @@ class Config:
             msgs.append("dense_snapshot_interval must be > 0")
         if self.sparse_snapshot_interval_seconds <= 0:
             msgs.append("sparse_snapshot_interval must be > 0")
-        if self.dense_interval_window_seconds < 0:
+        if self.dense_sampling_window_seconds < 0:
             msgs.append("dense_interval_window must be >= 0")
         if self.max_sparse_snapshot_count <= 0:
             msgs.append("max_sparse_snapshot_count must be > 0")
-        if self.dense_interval_window_seconds < self.dense_snapshot_interval_seconds:
+        if self.dense_sampling_window_seconds < self.dense_snapshot_interval_seconds:
             msgs.append("dense_interval_window must be >= dense_snapshot_interval")
         if self.dense_snapshot_interval_seconds > self.sparse_snapshot_interval_seconds:
             msgs.append("dense_snapshot_interval must be <= sparse_snapshot_interval")
@@ -68,7 +68,7 @@ class StatsTracker:
         self,
         current_time: float,
     ) -> list[StatusSnapshot]:
-        dense_cutoff_time = current_time - self._config.dense_interval_window_seconds
+        dense_cutoff_time = current_time - self._config.dense_sampling_window_seconds
 
         split_index = bisect.bisect_left(
             self._dense_status_history,

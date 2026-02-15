@@ -12,7 +12,7 @@ def test_config_errors() -> None:
         Config(sparse_snapshot_interval_seconds=0)
 
     with pytest.raises(ValueError, match="dense_interval_window must be >= 0"):
-        Config(dense_interval_window_seconds=-1)
+        Config(dense_sampling_window_seconds=-1)
 
     with pytest.raises(ValueError, match="max_sparse_snapshot_count must be > 0"):
         Config(max_sparse_snapshot_count=0)
@@ -21,7 +21,7 @@ def test_config_errors() -> None:
         ValueError,
         match="dense_interval_window must be >= dense_snapshot_interval",
     ):
-        Config(dense_snapshot_interval_seconds=10, dense_interval_window_seconds=5)
+        Config(dense_snapshot_interval_seconds=10, dense_sampling_window_seconds=5)
 
     with pytest.raises(
         ValueError,
@@ -60,7 +60,7 @@ def test_status_history_snapshot_interval(fake_time: FakeTime) -> None:
     unit = StatsTracker(
         config=Config(
             dense_snapshot_interval_seconds=1,
-            dense_interval_window_seconds=100,
+            dense_sampling_window_seconds=100,
             sparse_snapshot_interval_seconds=10,
             max_sparse_snapshot_count=10,
         ),
@@ -90,7 +90,7 @@ def test_status_history_trims_old_snapshots(fake_time: FakeTime) -> None:
     unit = StatsTracker(
         config=Config(
             dense_snapshot_interval_seconds=1,
-            dense_interval_window_seconds=10,
+            dense_sampling_window_seconds=10,
             sparse_snapshot_interval_seconds=5,
             max_sparse_snapshot_count=2,
         ),
@@ -116,7 +116,7 @@ def test_sparse_sampling_outside_dense_window(fake_time: FakeTime) -> None:
     unit = StatsTracker(
         Config(
             dense_snapshot_interval_seconds=1,
-            dense_interval_window_seconds=10,
+            dense_sampling_window_seconds=10,
             sparse_snapshot_interval_seconds=5,
             max_sparse_snapshot_count=1000,
         ),
@@ -148,7 +148,7 @@ def test_throw_away_samples_called_with_higher_frequency(fake_time: FakeTime) ->
     unit = StatsTracker(
         Config(
             dense_snapshot_interval_seconds=5,
-            dense_interval_window_seconds=30,
+            dense_sampling_window_seconds=30,
             sparse_snapshot_interval_seconds=30,
             max_sparse_snapshot_count=1000,
         ),
