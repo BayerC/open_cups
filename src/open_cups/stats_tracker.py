@@ -21,11 +21,11 @@ class Config:
         if self.sparse_snapshot_interval_seconds <= 0:
             msgs.append("sparse_snapshot_interval must be > 0")
         if self.dense_sampling_window_seconds < 0:
-            msgs.append("dense_interval_window must be >= 0")
+            msgs.append("dense_sampling_window must be >= 0")
         if self.max_sparse_snapshot_count <= 0:
             msgs.append("max_sparse_snapshot_count must be > 0")
         if self.dense_sampling_window_seconds < self.dense_snapshot_interval_seconds:
-            msgs.append("dense_interval_window must be >= dense_snapshot_interval")
+            msgs.append("dense_sampling_window must be >= dense_snapshot_interval")
         if self.dense_snapshot_interval_seconds > self.sparse_snapshot_interval_seconds:
             msgs.append("dense_snapshot_interval must be <= sparse_snapshot_interval")
 

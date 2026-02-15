@@ -11,7 +11,7 @@ def test_config_errors() -> None:
     with pytest.raises(ValueError, match="sparse_snapshot_interval must be > 0"):
         Config(sparse_snapshot_interval_seconds=0)
 
-    with pytest.raises(ValueError, match="dense_interval_window must be >= 0"):
+    with pytest.raises(ValueError, match="dense_sampling_window must be >= 0"):
         Config(dense_sampling_window_seconds=-1)
 
     with pytest.raises(ValueError, match="max_sparse_snapshot_count must be > 0"):
@@ -19,7 +19,7 @@ def test_config_errors() -> None:
 
     with pytest.raises(
         ValueError,
-        match="dense_interval_window must be >= dense_snapshot_interval",
+        match="dense_sampling_window must be >= dense_snapshot_interval",
     ):
         Config(dense_snapshot_interval_seconds=10, dense_sampling_window_seconds=5)
 
