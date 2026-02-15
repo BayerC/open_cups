@@ -144,7 +144,9 @@ def test_sparse_sampling_outside_dense_window(fake_time: FakeTime) -> None:
     assert sparse_snapshots[3].timestamp == 15.0
 
 
-def test_throw_away_samples_called_with_higher_frequency(fake_time: FakeTime) -> None:
+def test_disregard_samples_provided_quicker_than_dense_interval(
+    fake_time: FakeTime,
+) -> None:
     unit = StatsTracker(
         Config(
             dense_snapshot_interval_seconds=5,
