@@ -3,7 +3,8 @@ import time
 import uuid
 from collections.abc import Iterator
 
-from open_cups.stats_tracker import Config, StatsTracker
+from open_cups.stats_tracker import Config as StatsTrackerConfig
+from open_cups.stats_tracker import StatsTracker
 from open_cups.thread_safe_dict import ThreadSafeDict
 from open_cups.types import Question, StatusSnapshot, UserSession, UserStatus
 
@@ -15,7 +16,7 @@ class Room:
         self._host_id = host_id
         self._host_last_seen = time.time()
         self._questions: ThreadSafeDict[Question] = ThreadSafeDict()
-        self._stats_tracker = StatsTracker(Config())
+        self._stats_tracker = StatsTracker(StatsTrackerConfig())
         self._lock = threading.RLock()
 
     def is_host(self, session_id: str) -> bool:
