@@ -1,5 +1,6 @@
 import bisect
 import time
+from collections import deque
 from collections.abc import Iterable
 from dataclasses import dataclass
 
@@ -36,7 +37,9 @@ class Config:
 class StatsTracker:
     def __init__(self, config: Config) -> None:
         self._dense_status_history: list[StatusSnapshot] = []
-        self._sparse_status_history: list[StatusSnapshot] = []
+        self._sparse_status_history: deque[StatusSnapshot] = deque(
+            maxlen=config.max_sparse_snapshot_count,
+        )
         self._config = config
 
     def record_status_snapshot(self, user_sessions: Iterable[UserSession]) -> None:
@@ -49,7 +52,6 @@ class StatsTracker:
 
         snapshots_to_move = self._extract_old_snapshots_from_dense_history(current_time)
         self._append_to_sparse_history(snapshots_to_move)
-        self._prune_sparse_history_if_needed()
 
     def _want_to_record_snapshot(self, current_time: float) -> bool:
         if not self._dense_status_history:
@@ -88,18 +90,9 @@ class StatsTracker:
                 ):
                     self._sparse_status_history.append(snapshot)
 
-    def _prune_sparse_history_if_needed(self) -> None:
-        excess_count = (
-            len(self._sparse_status_history) - self._config.max_sparse_snapshot_count
-        )
-        if excess_count <= 0:
-            return
-
-        del self._sparse_status_history[:excess_count]
-
     @property
     def status_history(self) -> list[StatusSnapshot]:
-        return self._sparse_status_history + self._dense_status_history
+        return list(self._sparse_status_history) + self._dense_status_history
 
 
 def create_snapshot(user_sessions: Iterable[UserSession]) -> StatusSnapshot:
