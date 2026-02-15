@@ -1,3 +1,4 @@
+import bisect
 import time
 from collections.abc import Iterable
 from dataclasses import dataclass
@@ -56,12 +57,13 @@ class StatsTracker:
 
         dense_cutoff_time = current_time - self._config.dense_interval_window_seconds
 
-        snapshots_to_move = [
-            s for s in self._dense_status_history if s.timestamp < dense_cutoff_time
-        ]
-        self._dense_status_history = [
-            s for s in self._dense_status_history if s.timestamp >= dense_cutoff_time
-        ]
+        split_index = bisect.bisect_left(
+            self._dense_status_history,
+            dense_cutoff_time,
+            key=lambda s: s.timestamp,
+        )
+        snapshots_to_move = self._dense_status_history[:split_index]
+        self._dense_status_history = self._dense_status_history[split_index:]
 
         for snapshot in snapshots_to_move:
             if not self._sparse_status_history:
