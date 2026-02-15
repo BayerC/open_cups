@@ -34,10 +34,7 @@ class Config:
 
 
 class StatsTracker:
-    def __init__(
-        self,
-        config: Config,
-    ) -> None:
+    def __init__(self, config: Config) -> None:
         self._dense_status_history: list[StatusSnapshot] = []
         self._sparse_status_history: list[StatusSnapshot] = []
         self._config = config
