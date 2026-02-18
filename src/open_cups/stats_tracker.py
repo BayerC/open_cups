@@ -9,7 +9,6 @@ class StatsTracker:
         self._status_history: list[StatusSnapshot] = []
         self._snapshot_interval_seconds = snapshot_interval_seconds
         self._max_snapshot_count = max_snapshot_count
-        self._session_start_time = time.time()
 
     def record_status_snapshot(self, user_sessions: Iterable[UserSession]) -> None:
         if self._status_history:
@@ -25,10 +24,6 @@ class StatsTracker:
     @property
     def status_history(self) -> list[StatusSnapshot]:
         return self._status_history
-
-    @property
-    def session_start_time(self) -> float:
-        return self._session_start_time
 
 
 def create_snapshot(user_sessions: Iterable[UserSession]) -> StatusSnapshot:

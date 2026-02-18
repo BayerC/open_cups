@@ -1,16 +1,14 @@
 import io
 
-import pandas as pd
-import plotly.express as px
 import qrcode
 import streamlit as st
 from streamlit_autorefresh import st_autorefresh
 
+from open_cups.plots import show_room_statistics, show_status_history_chart
 from open_cups.state_provider import (
     ClientState,
     HostState,
     LobbyState,
-    RoomState,
     StateProvider,
 )
 from open_cups.types import UserStatus
@@ -19,11 +17,6 @@ AUTOREFRESH_INTERVAL_MS = 2000
 USER_REMOVAL_TIMEOUT_SECONDS = (
     60  # if we go lower, chrome's background tab throttling causes faulty user removal
 )
-
-GREY_COLOR = "#9CA3AF"
-RED_COLOR = "#EF4444"
-YELLOW_COLOR = "#FBBF24"
-GREEN_COLOR = "#10B981"
 
 
 def show_room_selection_screen(lobby: LobbyState) -> None:
@@ -67,6 +60,23 @@ def show_room_selection_screen(lobby: LobbyState) -> None:
 
     st.divider()
 
+    source_1 = "https://cloudfront-s3.solutiontree.com/pdfs/Reproducibles_EFA/The-Main-Idea-Embedded-Formative-Assessment-March-2013.pdf"
+    source_2 = (
+        "https://www.nwesd.org/wp-content/uploads/2013/08/PROL_Colored_Cups_kdj.pdf"
+    )
+    st.markdown(
+        f"### The traffic light cups technique [[1]]({source_1}) [[2]]({source_2})",
+    )
+    st.info(
+        "This system offers a simple, intuitive way to gather real-time audience feedback. "  # noqa: E501
+        "Participants indicate their level of understanding (originally done plastic cups) using a simple color code:\n\n"  # noqa: E501
+        "🟢 Green → Following easily  \n"
+        "🟡 Yellow → Need more explanation  \n"
+        "🔴 Red → Cannot follow\n\n"
+        "The presenter sees an aggregate view of the responses "
+        "and can adjust the lecture accordingly.",
+    )
+
     st.subheader("How to Use This App")
     step_col_1, step_col_2, step_col_3 = st.columns(3)
 
@@ -89,6 +99,18 @@ def show_room_selection_screen(lobby: LobbyState) -> None:
             "Participants join to share their status "
             "and ask/vote on questions.",
         )
+
+    st.markdown(
+        """
+    <p style='text-align: center; margin-top: 2rem;'>
+        <a href='https://ko-fi.com/opencups' target='_blank'>
+            <img src='https://img.shields.io/badge/Support%20us%20on-Ko--fi-FF5E5B?logo=ko-fi&logoColor=white'
+                 alt='Support on Ko-fi' />
+        </a>
+    </p>
+    """,
+        unsafe_allow_html=True,
+    )
 
 
 def show_user_status_selection(room: ClientState) -> None:
@@ -119,72 +141,6 @@ def show_user_status_selection(room: ClientState) -> None:
     )
     if has_user_transitioned_away_from_unknown_status:
         st.rerun()
-
-
-def get_statistics_data_frame(room: RoomState) -> pd.DataFrame:
-    participants = room.get_room_participants()
-    counts = {
-        status.value: sum(1 for _, s in participants if s == status)
-        for status in UserStatus
-    }
-    df = pd.DataFrame([counts])
-    # Reorder columns: UNKNOWN (bottom), RED, YELLOW, GREEN (top)
-    column_order = [
-        UserStatus.UNKNOWN.value,
-        UserStatus.RED.value,
-        UserStatus.YELLOW.value,
-        UserStatus.GREEN.value,
-    ]
-    return df[[col for col in column_order if col in df.columns]]
-
-
-def show_room_statistics(room: HostState | ClientState) -> None:
-    st.subheader("Room Overview")
-    df = get_statistics_data_frame(room)
-
-    if df.sum().sum() == 0:
-        st.info("No participants yet. Share the Room ID to get started!")
-        return
-
-    fig = px.bar(
-        df,
-        x=df.index,
-        y=df.columns,
-        color_discrete_sequence=[
-            GREY_COLOR,
-            RED_COLOR,
-            YELLOW_COLOR,
-            GREEN_COLOR,
-        ],
-    )
-
-    fig.update_layout(
-        showlegend=False,
-        xaxis={"visible": False},
-        yaxis={"visible": False},
-        margin={"l": 0, "r": 0, "t": 0, "b": 0},
-        height=250,
-    )
-
-    fig.update_traces(
-        marker_cornerradius=8,
-    )
-
-    disable_interactions_config = {
-        "displayModeBar": False,
-        "staticPlot": True,
-    }
-
-    left_col, _ = st.columns([3, 2])
-    with left_col:
-        st.plotly_chart(fig, config=disable_interactions_config)
-        participant_count = df.sum().sum()
-        st.markdown(
-            f"<p style='text-align: center;'>"
-            f"Number of participants: {participant_count}"
-            f"</p>",
-            unsafe_allow_html=True,
-        )
 
 
 def generate_qr_code_image(room_id: str) -> bytes:
@@ -254,7 +210,17 @@ def show_open_questions(state: HostState | ClientState) -> None:
 
 def show_active_room_host(host_state: HostState) -> None:
     show_active_room_header(host_state.room_id)
-    show_room_statistics(host_state)
+    view_choice = st.radio(
+        "Select View",
+        ["Live distribution", "Distribution history"],
+        horizontal=True,
+        key="host_view_choice",
+    )
+
+    if view_choice == "Live distribution":
+        show_room_statistics(host_state)
+    else:
+        show_status_history_chart(host_state)
 
     st.divider()
 

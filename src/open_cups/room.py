@@ -16,8 +16,8 @@ class Room:
         self._host_last_seen = time.time()
         self._questions: ThreadSafeDict[Question] = ThreadSafeDict()
         self._stats_tracker = StatsTracker(
-            snapshot_interval_seconds=1,
-            max_snapshot_count=100,
+            snapshot_interval_seconds=60,
+            max_snapshot_count=1000,
         )
         self._lock = threading.RLock()
 
@@ -92,7 +92,3 @@ class Room:
 
     def get_status_history(self) -> list[StatusSnapshot]:
         return self._stats_tracker.status_history
-
-    @property
-    def session_start_time(self) -> float:
-        return self._stats_tracker.session_start_time

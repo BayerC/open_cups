@@ -5,6 +5,7 @@ description = "Streamlit application for tracking lecture audience feedback"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
+    "pandas>=2.3.3",
     "plotly>=6.5.2",
     "qrcode>=8.1",
     "streamlit>=1.49.1",

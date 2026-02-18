@@ -1,0 +1,30 @@
+---
+name: Update dependencies
+
+on:
+  schedule:
+    - cron: "0 9 * * 2"
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: astral-sh/setup-uv@v7
+
+      - run: uv lock --upgrade
+      - run: uv sync
+      - run: uv export --no-dev --format requirements-txt --output-file requirements.txt
+
+      - uses: peter-evans/create-pull-request@v8.1.0
+        with:
+          branch: deps/auto-update
+          title: "chore: update dependencies"
+          commit-message: "chore: update dependencies"
+          token: ${{ secrets.GITHUB_TOKEN }}
+          draft: always-true

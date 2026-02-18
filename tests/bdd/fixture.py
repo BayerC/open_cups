@@ -4,7 +4,7 @@ import pandas as pd
 import pytest
 from streamlit.testing.v1 import AppTest
 
-from open_cups.app import get_statistics_data_frame
+from open_cups.plots import get_statistics_data_frame
 from open_cups.state_provider import Context, RoomState
 
 if TYPE_CHECKING:
@@ -44,7 +44,7 @@ def capture_stats(monkeypatch: pytest.MonkeyPatch) -> None:
         return df
 
     monkeypatch.setattr(
-        "open_cups.app.get_statistics_data_frame",
+        "open_cups.plots.get_statistics_data_frame",
         capture_wrapper,
     )
 

@@ -4,7 +4,7 @@ name: Lint
 on:
   pull_request:
     branches: [main]
-    types: [opened, reopened, edited, synchronize]
+    types: [opened, reopened, edited, synchronize, ready_for_review]
   workflow_dispatch:
 
 jobs:
