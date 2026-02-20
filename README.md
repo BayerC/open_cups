@@ -9,8 +9,9 @@
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
 [![Support us on Ko-fi](https://img.shields.io/badge/Support%20us%20on-Ko--fi-FF5E5B?logo=ko-fi&logoColor=white)](https://ko-fi.com/opencups)
 
+<img src="assets/logo.png" width="400">
 
-The app (currently beta, while https://github.com/BayerC/open_cups/milestone/1 is not done) is available at <https://open-cups.streamlit.app/>.
+The app is available at <https://open-cups.streamlit.app/>.
 
 ##  The traffic light cups technique  [[1]](https://cloudfront-s3.solutiontree.com/pdfs/Reproducibles_EFA/The-Main-Idea-Embedded-Formative-Assessment-March-2013.pdf) [[2]](https://www.nwesd.org/wp-content/uploads/2013/08/PROL_Colored_Cups_kdj.pdf)
 
