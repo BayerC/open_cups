@@ -23,8 +23,6 @@
 
 </div>
 
-## 📖 Overview
-OpenCups allows presenters to receive instant, non-verbal feedback from their audience...
 
 ##  The traffic light cups technique  [[1]](https://cloudfront-s3.solutiontree.com/pdfs/Reproducibles_EFA/The-Main-Idea-Embedded-Formative-Assessment-March-2013.pdf) [[2]](https://www.nwesd.org/wp-content/uploads/2013/08/PROL_Colored_Cups_kdj.pdf)
 
