@@ -1,17 +1,30 @@
- # OpenCups: Live Feedback for Presenters
+<div align="center">
 
-![CI](https://github.com/BayerC/open_cups/actions/workflows/ci.yml/badge.svg)
-[![codecov](https://codecov.io/gh/BayerC/open_cups/branch/main/graph/badge.svg)](https://codecov.io/gh/BayerC/open_cups)
+# OpenCups: Live Feedback for Presenters
+
+<img src="assets/logo.png" width="350">
+
+
+
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://open-cups.streamlit.app/)
+
+---
+
+### Project Status
+[![CI](https://github.com/BayerC/open_cups/actions/workflows/ci.yml/badge.svg)](your-link)
+[![codecov](https://codecov.io/gh/BayerC/open_cups/branch/main/graph/badge.svg)](your-link)
+[![Python 3.13+](https://img.shields.io/badge/python-3.13%2B-blue.svg)](https://www.python.org/downloads/)
 [![Code style: ruff](https://img.shields.io/badge/code%20style-ruff-000000.svg)](https://github.com/astral-sh/ruff)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Python 3.13+](https://img.shields.io/badge/python-3.13%2B-blue.svg)](https://www.python.org/downloads/)
-[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://open-cups.streamlit.app/)
+
+### Support
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
 [![Support us on Ko-fi](https://img.shields.io/badge/Support%20us%20on-Ko--fi-FF5E5B?logo=ko-fi&logoColor=white)](https://ko-fi.com/opencups)
 
-<img src="assets/logo.png" width="400">
+</div>
 
-The app is available at <https://open-cups.streamlit.app/>.
+## 📖 Overview
+OpenCups allows presenters to receive instant, non-verbal feedback from their audience...
 
 ##  The traffic light cups technique  [[1]](https://cloudfront-s3.solutiontree.com/pdfs/Reproducibles_EFA/The-Main-Idea-Embedded-Formative-Assessment-March-2013.pdf) [[2]](https://www.nwesd.org/wp-content/uploads/2013/08/PROL_Colored_Cups_kdj.pdf)
 
