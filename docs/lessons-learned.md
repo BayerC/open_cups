@@ -15,3 +15,4 @@
 - A retro is very important in an async remote team collaboration
 - [Python overloading](https://stackoverflow.com/a/54423390/7260972) is just a type hint and doesn't really allow defining two separate overloads.
   That requires usage of hacks such as `isinstance()`, which makes overloads not attractive
+- [Google NotebookLM](https://notebooklm.google.com/) is a great tool for ai generated one pager ("Infographic") or slides ("Slide Deck"). Note that one can customize the prompt using the edit symbol.
