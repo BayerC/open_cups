@@ -208,17 +208,8 @@ def show_open_questions(state: HostState | ClientState) -> None:
 
 def show_active_room_host(host_state: HostState) -> None:
     show_active_room_header(host_state.room_id)
-    view_choice = st.radio(
-        "Select View",
-        ["Live distribution", "Distribution history"],
-        horizontal=True,
-        key="host_view_choice",
-    )
 
-    if view_choice == "Live distribution":
-        show_room_statistics(host_state)
-    else:
-        show_status_history_chart(host_state)
+    show_status_history_chart(host_state)
 
     st.divider()
 
