@@ -1,6 +1,7 @@
 <img src="assets/logo.png" align="left" width="220" alt="OpenCups Logo" style="margin-right: 20px;">
 
-# OpenCups
+<br> <b> <font size="6">OpenCups</font>
+
 **Live Feedback for Presenters**
 
 [![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://open-cups.streamlit.app/)
