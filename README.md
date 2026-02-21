@@ -1,20 +1,26 @@
-<img src="assets/logo.png" align="left" width="240" alt="OpenCups Logo" style="margin-right: 20px;">
+# OpenCups
 
-<br> <b> <font size="6">OpenCups</font>
+<img src="assets/logo.png" align="left" width="300" alt="OpenCups Logo" style="margin-right: 20px;">
 
-**Live Feedback for Presenters**
+
+
+### Live Feedback for Presenters
 
 [![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://open-cups.streamlit.app/)
 
 [![CI](https://github.com/BayerC/open_cups/actions/workflows/ci.yml/badge.svg)](https://github.com/BayerC/open_cups/actions)
+<br>
 [![codecov](https://codecov.io/gh/BayerC/open_cups/branch/main/graph/badge.svg)](https://codecov.io/gh/BayerC/open_cups)
+<br>
 [![Python 3.13+](https://img.shields.io/badge/python-3.13%2B-blue.svg)](https://www.python.org/downloads/)
 <br>
 [![Code style: ruff](https://img.shields.io/badge/code%20style-ruff-000000.svg)](https://github.com/astral-sh/ruff)
+<br>
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+<br>
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
+<br>
 [![Support us on Ko-fi](https://img.shields.io/badge/Support%20us%20on-Ko--fi-FF5E5B?logo=ko-fi&logoColor=white)](https://ko-fi.com/opencups)
-
 <br clear="left"/>
 
 ---
