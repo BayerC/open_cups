@@ -1,4 +1,4 @@
-<img src="assets/logo.png" align="left" width="220" alt="OpenCups Logo" style="margin-right: 20px;">
+<img src="assets/logo.png" align="left" width="240" alt="OpenCups Logo" style="margin-right: 20px;">
 
 <br> <b> <font size="6">OpenCups</font>
 
