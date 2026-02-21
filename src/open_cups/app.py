@@ -27,8 +27,9 @@ def show_room_selection_screen(lobby: LobbyState) -> None:
         except ValueError:
             st.error("Room ID from URL not found")
 
-    st.empty()  # needed to work around a limitation in streamlit's AppTest framework.
-    # See https://github.com/BayerC/open_cups/pull/116#issuecomment-3926072600
+    # Workaround for a limitation in streamlit's AppTest framework.
+    # https://github.com/BayerC/open_cups/pull/116#issuecomment-3926072600
+    st.empty()
 
     left, right = st.columns([2, 1])
     with left:
