@@ -1,16 +1,31 @@
- # OpenCups: Live Feedback for Presenters
+# OpenCups
 
-![CI](https://github.com/BayerC/open_cups/actions/workflows/ci.yml/badge.svg)
+<img src="assets/logo.png" align="left" width="300" alt="OpenCups Logo" style="margin-right: 20px;">
+
+
+
+### Live Feedback for Presenters
+
+[![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://open-cups.streamlit.app/)
+
+[![CI](https://github.com/BayerC/open_cups/actions/workflows/ci.yml/badge.svg)](https://github.com/BayerC/open_cups/actions)
+<br>
 [![codecov](https://codecov.io/gh/BayerC/open_cups/branch/main/graph/badge.svg)](https://codecov.io/gh/BayerC/open_cups)
-[![Code style: ruff](https://img.shields.io/badge/code%20style-ruff-000000.svg)](https://github.com/astral-sh/ruff)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+<br>
 [![Python 3.13+](https://img.shields.io/badge/python-3.13%2B-blue.svg)](https://www.python.org/downloads/)
-[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://open-cups.streamlit.app/)
+<br>
+[![Code style: ruff](https://img.shields.io/badge/code%20style-ruff-000000.svg)](https://github.com/astral-sh/ruff)
+<br>
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+<br>
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
+<br>
 [![Support us on Ko-fi](https://img.shields.io/badge/Support%20us%20on-Ko--fi-FF5E5B?logo=ko-fi&logoColor=white)](https://ko-fi.com/opencups)
+<br clear="left"/>
+
+---
 
 
-The app (currently beta, while https://github.com/BayerC/open_cups/milestone/1 is not done) is available at <https://open-cups.streamlit.app/>.
 
 ##  The traffic light cups technique  [[1]](https://cloudfront-s3.solutiontree.com/pdfs/Reproducibles_EFA/The-Main-Idea-Embedded-Formative-Assessment-March-2013.pdf) [[2]](https://www.nwesd.org/wp-content/uploads/2013/08/PROL_Colored_Cups_kdj.pdf)
 
