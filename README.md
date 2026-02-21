@@ -1,27 +1,22 @@
+<img src="assets/logo.png" align="left" width="220" alt="OpenCups Logo" style="margin-right: 20px;">
 
-<table>
-  <tr>
-    <td width="30%" align="center" style="border: none;">
-      <img src="assets/logo.png" width="220" alt="OpenCups Logo">
-    </td>
-    <td width="70%" style="border: none; vertical-align: middle;">
-      <h1>OpenCups</h1>
-      <p><strong>Live Feedback for Presenters</strong></p>
-      <a href="https://open-cups.streamlit.app/">
-        <img src="https://static.streamlit.io/badges/streamlit_badge_black_white.svg" alt="Open in Streamlit">
-      </a>
-      <br><br>
-      <img src="https://github.com/BayerC/open_cups/actions/workflows/ci.yml/badge.svg" alt="CI Status">
-      <img src="https://codecov.io/gh/BayerC/open_cups/branch/main/graph/badge.svg" alt="Codecov">
-      <img src="https://img.shields.io/badge/python-3.13%2B-blue.svg" alt="Python Version">
-      <img src="https://img.shields.io/badge/code%20style-ruff-000000.svg" alt="Ruff">
-      <br>
-      <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License">
-      <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" alt="PRs Welcome">
-      <img src="https://img.shields.io/badge/Support%20us%20on-Ko--fi-FF5E5B?logo=ko-fi&logoColor=white" alt="Ko-fi">
-    </td>
-  </tr>
-</table>
+# OpenCups
+**Live Feedback for Presenters**
+
+[![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://open-cups.streamlit.app/)
+
+[![CI](https://github.com/BayerC/open_cups/actions/workflows/ci.yml/badge.svg)](https://github.com/BayerC/open_cups/actions)
+[![codecov](https://codecov.io/gh/BayerC/open_cups/branch/main/graph/badge.svg)](https://codecov.io/gh/BayerC/open_cups)
+[![Python 3.13+](https://img.shields.io/badge/python-3.13%2B-blue.svg)](https://www.python.org/downloads/)
+<br>
+[![Code style: ruff](https://img.shields.io/badge/code%20style-ruff-000000.svg)](https://github.com/astral-sh/ruff)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
+[![Support us on Ko-fi](https://img.shields.io/badge/Support%20us%20on-Ko--fi-FF5E5B?logo=ko-fi&logoColor=white)](https://ko-fi.com/opencups)
+
+<br clear="left"/>
+
+---
 
 
 
