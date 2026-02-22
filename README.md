@@ -26,7 +26,7 @@ The presenter shares the room ID, a direct link, or a QR code with the audience.
 **Gather Live Feedback:**
 Participants join to share their status and ask/vote on questions.
 
-
+<br clear="left"/>
 
 ##  The traffic light cups technique  [[1]](https://cloudfront-s3.solutiontree.com/pdfs/Reproducibles_EFA/The-Main-Idea-Embedded-Formative-Assessment-March-2013.pdf) [[2]](https://www.nwesd.org/wp-content/uploads/2013/08/PROL_Colored_Cups_kdj.pdf)
 
