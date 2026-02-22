@@ -1,29 +1,30 @@
-# OpenCups
+ # OpenCups: Live Feedback for Presenters
 
-<img src="assets/logo.png" align="left" width="300" alt="OpenCups Logo" style="margin-right: 20px;">
-
-
-
-### Live Feedback for Presenters
-
-[![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://open-cups.streamlit.app/)
-
-[![CI](https://github.com/BayerC/open_cups/actions/workflows/ci.yml/badge.svg)](https://github.com/BayerC/open_cups/actions)
-<br>
+![CI](https://github.com/BayerC/open_cups/actions/workflows/ci.yml/badge.svg)
 [![codecov](https://codecov.io/gh/BayerC/open_cups/branch/main/graph/badge.svg)](https://codecov.io/gh/BayerC/open_cups)
-<br>
-[![Python 3.13+](https://img.shields.io/badge/python-3.13%2B-blue.svg)](https://www.python.org/downloads/)
-<br>
 [![Code style: ruff](https://img.shields.io/badge/code%20style-ruff-000000.svg)](https://github.com/astral-sh/ruff)
-<br>
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-<br>
+[![Python 3.13+](https://img.shields.io/badge/python-3.13%2B-blue.svg)](https://www.python.org/downloads/)
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://open-cups.streamlit.app/)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
-<br>
 [![Support us on Ko-fi](https://img.shields.io/badge/Support%20us%20on-Ko--fi-FF5E5B?logo=ko-fi&logoColor=white)](https://ko-fi.com/opencups)
-<br clear="left"/>
 
----
+
+<img src="assets/logo.png" align="left" width="220" alt="OpenCups Logo" style="margin-right: 20px;">
+
+
+
+### How to Use This App:
+Open https://open-cups.streamlit.app/ or [run locally](#run-locally)
+
+**Create a Room:**
+The presenter starts a new session, which generates a unique room.
+
+**Share the Access Link:**
+The presenter shares the room ID, a direct link, or a QR code with the audience.
+
+**Gather Live Feedback:**
+Participants join to share their status and ask/vote on questions.
 
 
 
@@ -41,15 +42,7 @@ Participants indicate their level of understanding (originally done plastic cups
 
 The presenter sees an aggregate view of the responses and can adjust the lecture accordingly.
 
-### How to Use This App:
-Open https://open-cups.streamlit.app/ or [run locally](#run-locally)
 
-1. **Create a Room:**
-The presenter starts a new session, which generates a unique room.
-2. **Share the Access Link:**
-The presenter shares the room ID, a direct link, or a QR code with the audience.
-3. **Gather Live Feedback:**
-Participants join to share their status and ask/vote on questions.
 
 
 ## Run locally
