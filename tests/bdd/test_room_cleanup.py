@@ -7,10 +7,8 @@ from tests.bdd.test_helper import get_page_content, get_room_id
 
 
 @pytest.fixture(autouse=True)
-def freeze_time_to_zero(
-    monkeypatch: pytest.MonkeyPatch,
-) -> None:
-    monkeypatch.setattr("open_cups.room.time.time", lambda: 0)
+def freeze_time_to_zero(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setattr("time.time", lambda: 0)
 
 
 @scenario(
@@ -55,7 +53,10 @@ def there_should_be_more_than_zero_participants_in_my_room(
 @then("one user should be in the room")
 def one_user_should_be_in_the_room(context: dict[str, AppTest]) -> None:
     room_id = get_room_id(context["me"])
-    assert captured.room_data[room_id].sum().sum() == 1
+    assert captured.application_state is not None
+    room = captured.application_state.rooms[room_id]
+    session_count = len(list(room))
+    assert session_count == 1
 
 
 @when("the second user closes their session")
@@ -85,15 +86,18 @@ def given_timeout_has_passed(
     monkeypatch.setattr("open_cups.app.USER_REMOVAL_TIMEOUT_SECONDS", 3)
 
     for current_time in range(0, time_to_pass, step_time):
+        monkeypatch.setattr(
+            "time.time",
+            lambda current_time=current_time: current_time,
+        )
         for user in context.values():
-            monkeypatch.setattr(
-                "open_cups.room.time.time",
-                lambda current_time=current_time: current_time,
-            )
             user.run()
 
 
 @then("no more users should be in the room")
 def no_more_users_should_be_in_the_room(context: dict[str, AppTest]) -> None:
     room_id = get_room_id(context["me"])
-    assert captured.room_data[room_id].sum().sum() == 0
+    assert captured.application_state is not None
+    room = captured.application_state.rooms[room_id]
+    session_count = len(list(room))
+    assert session_count == 0
