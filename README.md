@@ -10,23 +10,23 @@
 [![Support us on Ko-fi](https://img.shields.io/badge/Support%20us%20on-Ko--fi-FF5E5B?logo=ko-fi&logoColor=white)](https://ko-fi.com/opencups)
 
 
-<img src="assets/logo.png" align="left" width="220" alt="OpenCups Logo" style="margin-right: 20px;">
+<img src="assets/logo.png" align="right" width="220" alt="OpenCups Logo" style="margin-left: 20px;">
 
 
 
-### How to Use This App:
+### How to Use This App
 Open https://open-cups.streamlit.app/ or [run locally](#run-locally)
 
-**Create a Room:**
+1. **Create a Room:**
 The presenter starts a new session, which generates a unique room.
 
-**Share the Access Link:**
+2. **Share the Access Link:**
 The presenter shares the room ID, a direct link, or a QR code with the audience.
 
-**Gather Live Feedback:**
+3. **Gather Live Feedback:**
 Participants join to share their status and ask/vote on questions.
 
-<br clear="left"/>
+<br clear="right"/>
 
 ##  The traffic light cups technique  [[1]](https://cloudfront-s3.solutiontree.com/pdfs/Reproducibles_EFA/The-Main-Idea-Embedded-Formative-Assessment-March-2013.pdf) [[2]](https://www.nwesd.org/wp-content/uploads/2013/08/PROL_Colored_Cups_kdj.pdf)
 
