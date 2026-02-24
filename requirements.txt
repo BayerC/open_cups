@@ -142,9 +142,9 @@ markupsafe==3.0.3 \
     --hash=sha256:f3e98bb3798ead92273dc0e5fd0f31ade220f59a266ffd8a4f6065e0a3ce0523 \
     --hash=sha256:fed51ac40f757d41b7c48425901843666a6677e3e8eb0abcff09e4ba6e664f50
     # via jinja2
-narwhals==2.16.0 \
-    --hash=sha256:155bb45132b370941ba0396d123cf9ed192bf25f39c4cea726f2da422ca4e145 \
-    --hash=sha256:846f1fd7093ac69d63526e50732033e86c30ea0026a44d9b23991010c7d1485d
+narwhals==2.17.0 \
+    --hash=sha256:2ac5307b7c2b275a7d66eeda906b8605e3d7a760951e188dcfff86e8ebe083dd \
+    --hash=sha256:ebd5bc95bcfa2f8e89a8ac09e2765a63055162837208e67b42d6eeb6651d5e67
     # via
     #   altair
     #   plotly
