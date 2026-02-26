@@ -91,16 +91,22 @@ def show_status_history_chart(host_state: HostState) -> None:
 
     latest_snapshot_time = status_history[-1].timestamp
 
-    data = {
-        "Time (minutes)": [
-            (snapshot.timestamp - latest_snapshot_time) / 60
-            for snapshot in status_history
-        ],
-    }
+    timestamps = [
+        (snapshot.timestamp - latest_snapshot_time) / 60 for snapshot in status_history
+    ]
+
+    # Calculate a minimum visual width for the "current" segment.
+    # We express it as a fraction of the total time range so it's always visible.
+    total_range = timestamps[-1] - timestamps[0] if len(timestamps) > 1 else 1
+    future_width = total_range / 9  # 10% future = 1/9 of history range
+
+    phantom_time = future_width
+    timestamps_extended = [*timestamps, phantom_time]
+
+    data = {"Time (minutes)": timestamps_extended}
     for user_status in UserStatus:
-        data[user_status.value] = [
-            snapshot.counts[user_status] for snapshot in status_history
-        ]
+        counts = [snapshot.counts[user_status] for snapshot in status_history]
+        data[user_status.value] = [*counts, counts[-1]]  # repeat last value
 
     df = pd.DataFrame(data)
 
@@ -128,7 +134,12 @@ def show_status_history_chart(host_state: HostState) -> None:
     )
 
     fig.update_layout(
-        xaxis={"title": "Time (minutes)", "dtick": 1, "tickformat": "d"},
+        xaxis={
+            "title": "Time (minutes)",
+            "dtick": 1,
+            "tickformat": "d",
+            "range": [timestamps[0], phantom_time],  # lock axis to our computed range
+        },
         yaxis={"title": "Number of participants", "dtick": 1},
         hovermode="x unified",
         showlegend=False,
@@ -136,8 +147,6 @@ def show_status_history_chart(host_state: HostState) -> None:
         height=400,
     )
 
-    # This flickers in many refreshes, even though we do basically the same as for
-    # the bar chart. Is this acceptable?
     st.plotly_chart(
         fig,
         width="stretch",
