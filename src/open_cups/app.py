@@ -218,7 +218,7 @@ def show_active_room_host(host_state: HostState) -> None:
     show_active_room_header(host_state.room_id)
     view_choice = st.radio(
         "Select View",
-        ["Live distribution", "Distribution history"],
+        ["Distribution history", "Live distribution"],
         horizontal=True,
         key="host_view_choice",
     )

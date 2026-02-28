@@ -86,6 +86,16 @@ def show_room_statistics(room: HostState | ClientState) -> None:
         )
 
 
+def add_future_timestamp(
+    timestamps: list[float], relative_extension: float
+) -> list[float]:
+    total_range = timestamps[-1] - timestamps[0] if len(timestamps) > 1 else 1
+    absolute_extension = total_range * relative_extension
+
+    phantom_time = timestamps[-1] + absolute_extension
+    return [*timestamps, phantom_time]
+
+
 def show_status_history_chart(host_state: HostState) -> None:
     status_history = host_state.get_status_history()
 
@@ -99,18 +109,15 @@ def show_status_history_chart(host_state: HostState) -> None:
         (snapshot.timestamp - latest_snapshot_time) / 60 for snapshot in status_history
     ]
 
-    # Calculate a minimum visual width for the "current" segment.
-    # We express it as a fraction of the total time range so it's always visible.
-    total_range = timestamps[-1] - timestamps[0] if len(timestamps) > 1 else 1
-    future_width = total_range / 9  # 10% future = 1/9 of history range
-
-    phantom_time = future_width
-    timestamps_extended = [*timestamps, phantom_time]
+    timestamps_extended = add_future_timestamp(timestamps, relative_extension=0.1)
 
     data = {"Time (minutes)": timestamps_extended}
     for user_status in UserStatus:
         counts = [snapshot.counts[user_status] for snapshot in status_history]
-        data[user_status.value] = [*counts, counts[-1]]  # repeat last value
+        data[user_status.value] = [
+            *counts,
+            counts[-1],
+        ]  # repeat last value in future timestamp
 
     df = pd.DataFrame(data)
 
@@ -145,7 +152,7 @@ def show_status_history_chart(host_state: HostState) -> None:
             "title": "Time (minutes)",
             "dtick": x_dtick,
             "tickformat": "d",
-            "range": [timestamps[0], phantom_time],  # lock axis to our computed range
+            "range": [timestamps_extended[0], timestamps_extended[-1]],
         },
         yaxis={"title": "Number of participants", "dtick": 1},
         hovermode="x unified",
