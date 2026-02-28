@@ -46,11 +46,7 @@ def there_should_be_more_than_zero_participants_in_my_room(
 
 @then("one user should be in the room")
 def one_user_should_be_in_the_room(context: dict[str, AppTest]) -> None:
-    room_id = get_room_id(context["me"])
-    assert captured.application_state is not None
-    room = captured.application_state.rooms[room_id]
-    session_count = len(list(room))
-    assert session_count == 1
+    assert_session_count_in_room(context, expected_count=1)
 
 
 @when("the second user closes their session")
@@ -90,8 +86,15 @@ def given_timeout_has_passed(
 
 @then("no more users should be in the room")
 def no_more_users_should_be_in_the_room(context: dict[str, AppTest]) -> None:
+    assert_session_count_in_room(context, expected_count=0)
+
+
+def assert_session_count_in_room(
+    context: dict[str, AppTest],
+    expected_count: int,
+) -> None:
     room_id = get_room_id(context["me"])
     assert captured.application_state is not None
     room = captured.application_state.rooms[room_id]
     session_count = len(list(room))
-    assert session_count == 0
+    assert session_count == expected_count
