@@ -36,12 +36,6 @@ def i_should_see_info_message(
     assert info_message in content
 
 
-@when("the app cycled once")
-def the_app_cycled_once(context: dict[str, AppTest]) -> None:
-    for app in context.values():
-        app.run()
-
-
 @then("there should be more than zero participants in my room")
 def there_should_be_more_than_zero_participants_in_my_room(
     context: dict[str, AppTest],
