@@ -1,3 +1,5 @@
+import math
+
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
@@ -9,6 +11,8 @@ from open_cups.state_provider import (
     RoomState,
 )
 from open_cups.types import UserStatus
+
+MAX_NUMBER_OF_TICKS = 10
 
 GREY_COLOR = "#9CA3AF"
 RED_COLOR = "#EF4444"
@@ -82,6 +86,16 @@ def show_room_statistics(room: HostState | ClientState) -> None:
         )
 
 
+def add_future_timestamp(
+    timestamps: list[float], relative_extension: float
+) -> list[float]:
+    total_range = timestamps[-1] - timestamps[0] if len(timestamps) > 1 else 1
+    absolute_extension = total_range * relative_extension
+
+    phantom_time = timestamps[-1] + absolute_extension
+    return [*timestamps, phantom_time]
+
+
 def show_status_history_chart(host_state: HostState) -> None:
     status_history = host_state.get_status_history()
 
@@ -91,16 +105,19 @@ def show_status_history_chart(host_state: HostState) -> None:
 
     latest_snapshot_time = status_history[-1].timestamp
 
-    data = {
-        "Time (minutes)": [
-            (snapshot.timestamp - latest_snapshot_time) / 60
-            for snapshot in status_history
-        ],
-    }
+    timestamps = [
+        (snapshot.timestamp - latest_snapshot_time) / 60 for snapshot in status_history
+    ]
+
+    timestamps_extended = add_future_timestamp(timestamps, relative_extension=0.1)
+
+    data = {"Time (minutes)": timestamps_extended}
     for user_status in UserStatus:
+        counts = [snapshot.counts[user_status] for snapshot in status_history]
         data[user_status.value] = [
-            snapshot.counts[user_status] for snapshot in status_history
-        ]
+            *counts,
+            counts[-1],
+        ]  # repeat last value in future timestamp
 
     df = pd.DataFrame(data)
 
@@ -127,8 +144,16 @@ def show_status_history_chart(host_state: HostState) -> None:
         annotation_position="top right",
     )
 
+    x_range_size = timestamps_extended[-1] - timestamps_extended[0]
+    x_dtick = max(1, math.ceil(x_range_size / MAX_NUMBER_OF_TICKS))
+
     fig.update_layout(
-        xaxis={"title": "Time (minutes)", "dtick": 1, "tickformat": "d"},
+        xaxis={
+            "title": "Time (minutes)",
+            "dtick": x_dtick,
+            "tickformat": "d",
+            "range": [timestamps_extended[0], timestamps_extended[-1]],
+        },
         yaxis={"title": "Number of participants", "dtick": 1},
         hovermode="x unified",
         showlegend=False,
@@ -136,8 +161,6 @@ def show_status_history_chart(host_state: HostState) -> None:
         height=400,
     )
 
-    # This flickers in many refreshes, even though we do basically the same as for
-    # the bar chart. Is this acceptable?
     st.plotly_chart(
         fig,
         width="stretch",
