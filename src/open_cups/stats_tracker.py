@@ -45,7 +45,7 @@ class StatsTracker:
     def record_status_snapshot(self, user_sessions: Iterable[UserSession]) -> None:
         current_time = time.time()
 
-        if not self._want_to_record_snapshot(current_time):
+        if not self._should_record_snapshot(current_time):
             return
 
         self._dense_status_history.append(create_snapshot(user_sessions))
@@ -53,7 +53,7 @@ class StatsTracker:
         snapshots_to_move = self._extract_old_snapshots_from_dense_history(current_time)
         self._append_to_sparse_history(snapshots_to_move)
 
-    def _want_to_record_snapshot(self, current_time: float) -> bool:
+    def _should_record_snapshot(self, current_time: float) -> bool:
         if not self._dense_status_history:
             return True
 

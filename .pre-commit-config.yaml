@@ -78,6 +78,7 @@ repos:
         entry: >
           env -u PYTHONPATH uv run pytest tests/unit/
           --cov=open_cups.thread_safe_dict
+          --cov=open_cups.stats_tracker
           --cov-report=term-missing --cov-fail-under=100
         language: system
         types: [python]
