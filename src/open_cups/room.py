@@ -1,8 +1,8 @@
 import threading
-import time
 import uuid
 from collections.abc import Iterator
 
+from open_cups import clock
 from open_cups.stats_tracker import Config as StatsTrackerConfig
 from open_cups.stats_tracker import StatsTracker
 from open_cups.thread_safe_dict import ThreadSafeDict
@@ -14,7 +14,7 @@ class Room:
         self._room_id = room_id
         self._sessions: ThreadSafeDict[UserSession] = ThreadSafeDict()
         self._host_id = host_id
-        self._host_last_seen = time.time()
+        self._host_last_seen = clock.now()
         self._questions: ThreadSafeDict[Question] = ThreadSafeDict()
         self._stats_tracker = StatsTracker(StatsTrackerConfig())
         self._lock = threading.RLock()
@@ -23,10 +23,10 @@ class Room:
         return self._host_id == session_id
 
     def update_host_last_seen(self) -> None:
-        self._host_last_seen = time.time()
+        self._host_last_seen = clock.now()
 
     def set_session_status(self, session_id: str, status: UserStatus) -> None:
-        self._sessions[session_id] = UserSession(status, time.time())
+        self._sessions[session_id] = UserSession(status, clock.now())
         with self._lock:
             self._stats_tracker.record_status_snapshot(self._sessions.values())
 
@@ -35,7 +35,7 @@ class Room:
 
     def update_session(self, session_id: str) -> None:
         if session_id in self._sessions:
-            self._sessions[session_id].last_seen = time.time()
+            self._sessions[session_id].last_seen = clock.now()
 
     def has_session(self, session_id: str) -> bool:
         if session_id in self._sessions:
@@ -50,11 +50,11 @@ class Room:
         return self._room_id
 
     def is_host_inactive(self, timeout_seconds: int) -> bool:
-        current_time = time.time()
+        current_time = clock.now()
         return current_time - self._host_last_seen > timeout_seconds
 
     def remove_inactive_sessions(self, timeout_seconds: int) -> None:
-        current_time = time.time()
+        current_time = clock.now()
         users_to_remove = [
             session_id
             for session_id, user_session in self._sessions.items()

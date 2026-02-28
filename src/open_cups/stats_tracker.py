@@ -1,9 +1,9 @@
 import bisect
-import time
 from collections import deque
 from collections.abc import Iterable
 from dataclasses import dataclass
 
+from open_cups import clock
 from open_cups.types import StatusSnapshot, UserSession, UserStatus
 
 
@@ -43,7 +43,7 @@ class StatsTracker:
         self._config = config
 
     def record_status_snapshot(self, user_sessions: Iterable[UserSession]) -> None:
-        current_time = time.time()
+        current_time = clock.now()
 
         if not self._should_record_snapshot(current_time):
             return
@@ -97,7 +97,7 @@ class StatsTracker:
 
 def create_snapshot(user_sessions: Iterable[UserSession]) -> StatusSnapshot:
     snapshot = StatusSnapshot(
-        timestamp=time.time(),
+        timestamp=clock.now(),
         counts={
             UserStatus.GREEN: 0,
             UserStatus.YELLOW: 0,
