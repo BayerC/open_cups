@@ -1,3 +1,5 @@
+import math
+
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
@@ -9,6 +11,8 @@ from open_cups.state_provider import (
     RoomState,
 )
 from open_cups.types import UserStatus
+
+MAX_NUMBER_OF_TICKS = 10
 
 GREY_COLOR = "#9CA3AF"
 RED_COLOR = "#EF4444"
@@ -133,10 +137,13 @@ def show_status_history_chart(host_state: HostState) -> None:
         annotation_position="top right",
     )
 
+    x_range_size = timestamps_extended[-1] - timestamps_extended[0]
+    x_dtick = max(1, math.ceil(x_range_size / MAX_NUMBER_OF_TICKS))
+
     fig.update_layout(
         xaxis={
             "title": "Time (minutes)",
-            "dtick": 1,
+            "dtick": x_dtick,
             "tickformat": "d",
             "range": [timestamps[0], phantom_time],  # lock axis to our computed range
         },
