@@ -2,15 +2,17 @@ Feature: Room cleanup
 
   Scenario: Disconnected user is removed from user status after timeout
     Given I host a room
+    Then I should see info message "No status history yet"
     When a second user joins the room
-    Then there should be 1 participant in my room
+    Then there should be more than zero participants in my room
+    Then one user should be in the room
     When the second user closes their session
-    And a given timeout has passed
-    Then I should see info message "No participants yet. Share the Room ID to get started!"
+    And the user removal timeout has passed
+    Then no more users should be in the room
 
   Scenario: Room host disconnects
     Given I host a room
     When a second user joins the room
     When I close my session
-    And a given timeout has passed
+    And the user removal timeout has passed
     Then the second user should be on the room selection screen

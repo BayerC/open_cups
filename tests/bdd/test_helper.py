@@ -13,10 +13,6 @@ def get_page_content(app: AppTest) -> str:
     return f"{markdown_content}\n{text_content}\n{info_content}"
 
 
-def get_info_content(app: AppTest) -> str:
-    return "\n".join(element.value for element in app.info)
-
-
 def check_page_contents(
     app: AppTest,
     expected: tuple[str, ...],

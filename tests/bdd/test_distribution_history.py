@@ -1,6 +1,6 @@
 import json
 
-from pytest_bdd import parsers, scenario, then, when
+from pytest_bdd import scenario, then
 from streamlit.testing.v1 import AppTest
 
 from open_cups.types import UserStatus
@@ -12,11 +12,6 @@ from open_cups.types import UserStatus
 )
 def test_host_views_distribution_history() -> None:
     pass
-
-
-@when(parsers.parse('I select the view "{view_name}"'))
-def i_select_view(context: dict[str, AppTest], view_name: str) -> None:
-    context["me"].radio(key="host_view_choice").set_value(view_name).run()
 
 
 @then("I should see the distribution history empty state")

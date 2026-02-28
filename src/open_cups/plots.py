@@ -43,10 +43,6 @@ def show_room_statistics(room: HostState | ClientState) -> None:
     st.subheader("Room Overview")
     df = get_statistics_data_frame(room)
 
-    if df.sum().sum() == 0:
-        st.info("No participants yet. Share the Room ID to get started!")
-        return
-
     fig = px.bar(
         df,
         x=df.index,
