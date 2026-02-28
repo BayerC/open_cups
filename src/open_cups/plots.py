@@ -43,10 +43,6 @@ def show_room_statistics(room: HostState | ClientState) -> None:
     st.subheader("Room Overview")
     df = get_statistics_data_frame(room)
 
-    if df.sum().sum() == 0:
-        st.info("No participants yet. Share the Room ID to get started!")
-        return
-
     fig = px.bar(
         df,
         x=df.index,
@@ -83,8 +79,6 @@ def show_room_statistics(room: HostState | ClientState) -> None:
 
 
 def show_status_history_chart(host_state: HostState) -> None:
-    import math
-    
     status_history = host_state.get_status_history()
 
     if not status_history:
@@ -93,24 +87,12 @@ def show_status_history_chart(host_state: HostState) -> None:
 
     latest_snapshot_time = status_history[-1].timestamp
 
-    times_minutes = [
-        (snapshot.timestamp - latest_snapshot_time) / 60
-        for snapshot in status_history
-    ]
-    oldest_time = min(times_minutes)
-
-    def transform_time(t: float) -> float:
-        """Logarithmic transformation: recent past gets more space than distant past."""
-        if oldest_time >= 0:
-            return 0
-        
-        log_range = math.log(1 + abs(oldest_time))
-        normalized = (math.log(1 + abs(oldest_time)) - math.log(1 + abs(t))) / log_range
-        return normalized * 100
-
-    transformed_times = [transform_time(t) for t in times_minutes]
-
-    data = {"Transformed Time": transformed_times}
+    data = {
+        "Time (minutes)": [
+            (snapshot.timestamp - latest_snapshot_time) / 60
+            for snapshot in status_history
+        ],
+    }
     for user_status in UserStatus:
         data[user_status.value] = [
             snapshot.counts[user_status] for snapshot in status_history
@@ -123,7 +105,7 @@ def show_status_history_chart(host_state: HostState) -> None:
     for user_status, color in ORDERED_STATUS_COLOR_MAP:
         fig.add_trace(
             go.Scatter(
-                x=df["Transformed Time"],
+                x=df["Time (minutes)"],
                 y=df[user_status.value],
                 name=user_status.value,
                 mode="lines",
@@ -132,16 +114,8 @@ def show_status_history_chart(host_state: HostState) -> None:
             ),
         )
 
-    tickvals = []
-    ticktext = []
-    
-    for minute in range(int(oldest_time), 1):
-        transformed = transform_time(float(minute))
-        tickvals.append(transformed)
-        ticktext.append(str(minute))
-
     fig.add_vline(
-        x=100,
+        x=0,
         line_width=1,
         line_dash="dot",
         line_color=GREY_COLOR,
@@ -150,12 +124,7 @@ def show_status_history_chart(host_state: HostState) -> None:
     )
 
     fig.update_layout(
-        xaxis={
-            "title": "Time (minutes)",
-            "range": [0, 100],
-            "tickvals": tickvals,
-            "ticktext": ticktext,
-        },
+        xaxis={"title": "Time (minutes)", "dtick": 1, "tickformat": "d"},
         yaxis={"title": "Number of participants", "dtick": 1},
         hovermode="x unified",
         showlegend=False,
