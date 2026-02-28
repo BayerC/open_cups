@@ -11,6 +11,17 @@ def freeze_time_to_zero(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr("time.time", lambda: 0)
 
 
+def assert_session_count_in_room(
+    context: dict[str, AppTest],
+    expected_count: int,
+) -> None:
+    room_id = get_room_id(context["me"])
+    assert captured.application_state is not None
+    room = captured.application_state.rooms[room_id]
+    session_count = len(list(room))
+    assert session_count == expected_count
+
+
 @scenario(
     "features/room_cleanup.feature",
     "Disconnected user is removed from user status after timeout",
@@ -87,14 +98,3 @@ def given_timeout_has_passed(
 @then("no more users should be in the room")
 def no_more_users_should_be_in_the_room(context: dict[str, AppTest]) -> None:
     assert_session_count_in_room(context, expected_count=0)
-
-
-def assert_session_count_in_room(
-    context: dict[str, AppTest],
-    expected_count: int,
-) -> None:
-    room_id = get_room_id(context["me"])
-    assert captured.application_state is not None
-    room = captured.application_state.rooms[room_id]
-    session_count = len(list(room))
-    assert session_count == expected_count
